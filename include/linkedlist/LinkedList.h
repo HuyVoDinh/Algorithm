@@ -12,7 +12,7 @@ class LinkedList {
         virtual void pop_back() = 0;
         virtual void remove(const T& value) = 0;
         virtual bool contains(const T& value) const = 0;
-        virtual bool find(const T& value) const = 0;
+        virtual Node* find(const T& value) const = 0;
         virtual T front() const = 0;
         virtual T back() const = 0;
         virtual void clear() = 0;
@@ -33,4 +33,5 @@ class LinkedList {
         virtual bool equals(const LinkedList<T>& other) const = 0;
         virtual void swap(LinkedList<T>& other) = 0;
         virtual T mid() const = 0;
+        virtual Node* getHead() const = 0;
 };

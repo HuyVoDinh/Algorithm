@@ -24,7 +24,7 @@ class SingleLinkedList : public LinkedList<T> {
         void pop_back() override;
         void remove(const T& value) override;
         bool contains(const T& value) const override;
-        bool find(const T& value) const override;
+        Node* find(const T& value) const override;
         T front() const override;
         T back() const override;
         void clear() override;
@@ -45,6 +45,7 @@ class SingleLinkedList : public LinkedList<T> {
         bool equals(const LinkedList<T>& other) const override;
         void swap(LinkedList<T>& other) override;
         T mid() const override;
+        Node* getHead() const override;
 };
 
 #include "detail/SingleLinkedList.tpp"
