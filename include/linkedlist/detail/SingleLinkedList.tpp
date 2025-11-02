@@ -4,7 +4,7 @@
 
 template <typename T>
 void SingleLinkedList<T>::push_front(const T& value) {
-    Node* newNode = new Node(value);
+    SingleNode* newNode = new SingleNode(value);
     newNode->next = head;
     head = newNode;
     ++size;
@@ -12,13 +12,13 @@ void SingleLinkedList<T>::push_front(const T& value) {
 
 template <typename T>
 void SingleLinkedList<T>::push_back(const T& value){
-    Node *node = new Node(value);
+    SingleNode *node = new SingleNode(value);
 
     if(head == nullptr){
         head = node;
     }
     else {
-        Node *current = head;
+        SingleNode *current = head;
         while(current->next != nullptr){
             current = current->next;
         }
@@ -31,7 +31,7 @@ template <typename T>
 void SingleLinkedList<T>::pop_front(){
     if(head == nullptr) return;
 
-    Node *temp = head;
+    SingleNode *temp = head;
     head = head->next;
     delete temp;
     --size;
@@ -46,7 +46,7 @@ void SingleLinkedList<T>::pop_back(){
         head = nullptr;
     }
     else {
-        Node *current = head;
+        SingleNode *current = head;
         while(current->next->next != nullptr){
             current = current->next;
         }
@@ -59,18 +59,18 @@ void SingleLinkedList<T>::pop_back(){
 template <typename T>
 void SingleLinkedList<T>::remove(const T& value){
     if(head != nullptr){
-        Node* current = head;
-        if(head->data == value){
+        SingleNode* current = head;
+        if(head->value == value){
             pop_front();
             return;
         }
         else{
-            Node *previous = current;
-            while(current->next != nullptr && current->data != value){
+            SingleNode *previous = current;
+            while(current->next != nullptr && current->value != value){
                 previous = current;
                 current = current->next;
             }
-            if(current->data == value){
+            if(current->value == value){
                 previous->next = current->next;
                 delete current;
                 current = nullptr;
@@ -82,9 +82,9 @@ void SingleLinkedList<T>::remove(const T& value){
 
 template <typename T>
 bool SingleLinkedList<T>::contains(const T& value) const {
-    Node *current = head;
+    SingleNode *current = head;
     while(current != nullptr){
-        if(current->data == value){
+        if(current->value == value){
             return true;
         }
         current = current->next;
@@ -93,10 +93,10 @@ bool SingleLinkedList<T>::contains(const T& value) const {
 }
 
 template <typename T>
-SingleLinkedList<T>::Node* SingleLinkedList<T>::find(const T& value) const {
-    Node *current = head;
+typename SingleLinkedList<T>::SingleNode* SingleLinkedList<T>::find(const T& value) const {
+    SingleNode *current = head;
     while(current != nullptr){
-        if(current-> data == value){
+        if(current->value == value){
             return current;
         }
         current = current->next;
@@ -107,7 +107,7 @@ SingleLinkedList<T>::Node* SingleLinkedList<T>::find(const T& value) const {
 template <typename T>
 T SingleLinkedList<T>::front() const{
     if(head != nullptr){
-        return head->data;
+        return head->value;
     }
     return T();
 }
@@ -116,17 +116,17 @@ template <typename T>
 T SingleLinkedList<T>::back() const{
     if(head == nullptr) return T();
 
-    Node *current = head;
+    SingleNode *current = head;
     while(current->next != nullptr){
         current = current->next;
     }
-    return current->data;
+    return current->value;
 }
 
 template <typename T>
 void SingleLinkedList<T>::clear(){
     while(head != nullptr){
-        Node *current = head;
+        SingleNode *current = head;
         head = head->next;
         delete current;
         --size;
@@ -147,21 +147,21 @@ template <typename T>
 T SingleLinkedList<T>::at(int index) const{
     if(index < 0 || index >= size) return T();
 
-    Node *current = head;
+    SingleNode *current = head;
     while(current != nullptr && index > 0){
         current = current->next;
         --index;
     }
     
-    return current != nullptr ? current->data : T();
+    return current != nullptr ? current->value : T();
 }
 
 template <typename T>
-void SingleLinkedList<T>::indexOf(const T& value){
+int SingleLinkedList<T>::indexOf(const T& value){
     int index = 0;
-    Node *current = head;
+    SingleNode *current = head;
     while(current != nullptr){
-        if(current->data == value){
+        if(current->value == value){
             return index;
         }
         current = current->next;
@@ -172,8 +172,8 @@ void SingleLinkedList<T>::indexOf(const T& value){
 
 template <typename T>
 void SingleLinkedList<T>::insert(int index, const T& value){
-    Node node = new Node(value);
-    Node current = head;
+    SingleNode *node = new SingleNode(value);
+    SingleNode *current = head;
 
     if(index > size) return;
     
@@ -193,7 +193,7 @@ void SingleLinkedList<T>::insert(int index, const T& value){
 }
 
 template <typename T>
-void SingleLinkedList<T>::removeAt(const T& value){
+void SingleLinkedList<T>::removeAt(int index){
     if (index > size) return;
 
     if(index == 0){
@@ -201,8 +201,8 @@ void SingleLinkedList<T>::removeAt(const T& value){
         return;
     }
     else{
-        Node current = head;
-        Node previous = nullptr;
+        SingleNode *current = head;
+        SingleNode *previous = nullptr;
         while(index > 0){
             previous = current;
             current = current->next;
@@ -217,9 +217,9 @@ void SingleLinkedList<T>::removeAt(const T& value){
 
 template <typename T>
 void SingleLinkedList<T>::reverse(){
-    Node current = head;
-    Node previous = nullptr;
-    Node nextPtr = head->next;
+    SingleNode *current = head;
+    SingleNode *previous = nullptr;
+    SingleNode *nextPtr = head->next;
     previous->next = nullptr;
     while(nextPtr->next != nullptr){
         previous = current;
@@ -244,9 +244,9 @@ void SingleLinkedList<T>::unique(){
 template <typename T>
 std::vector<T> SingleLinkedList<T>::toVector() const{
     std::vector<T> vec;
-    Node *current = head;
+    SingleNode *current = head;
     while(current != nullptr){
-        vec.push_back(current->data);
+        vec.push_back(current->value);
         current = current->next;
     }
     return vec;
@@ -254,14 +254,28 @@ std::vector<T> SingleLinkedList<T>::toVector() const{
 
 template <typename T>
 void SingleLinkedList<T>::merge(LinkedList<T>& other){
+    SingleNode *current = head;
+    const SingleLinkedList<T> *otherSLL = dynamic_cast<const SingleLinkedList<T>*>(&other);
+    SingleNode *mergePtr = otherSLL->getHead();
 
+    if(head == nullptr){
+        head = mergePtr;
+        size = other.getSize();
+        return;
+    } else {
+        while(current->next != nullptr){
+            current = current->next;
+        }
+        current->next = mergePtr;
+        size += other.getSize();
+    }
 }
 
 template <typename T>
 void SingleLinkedList<T>::print() const{
-    Node *current = head;
+    SingleNode *current = head;
     while(current != nullptr){
-        std::cout << current->data << " -> ";
+        std::cout << current->value << " -> ";
         current = current->next;
     }
     std::cout << "nullptr" << std::endl;
@@ -270,14 +284,15 @@ void SingleLinkedList<T>::print() const{
 
 template <typename T>
 void SingleLinkedList<T>::copyFrom(const LinkedList<T>& other){
-    Node current = head;
-    Node copiedPtr = other.getHead();
+    SingleNode *current = head;
+    const SingleLinkedList<T> *otherSLL = dynamic_cast<const SingleLinkedList<T>*>(&other);
+    SingleNode *copiedPtr = otherSLL->getHead();
 
     while(copiedPtr != nullptr){
         if(current->next != nullptr){
-            current.data = copiedPtr->data;
+            current->value = copiedPtr->value;
         } else {
-            Node node = new Node(copiedPtr->data);
+            SingleNode *node = new SingleNode(copiedPtr->value);
             current->next = node;
         }
 
@@ -288,12 +303,12 @@ void SingleLinkedList<T>::copyFrom(const LinkedList<T>& other){
 
 template <typename T>
 LinkedList<T>* SingleLinkedList<T>::clone() const{
-    Node current = head;
-    Node headClone;
+    SingleNode *current = head;
+    SingleNode *headClone;
     bool firstNode = true;
-    Node nodeClonePtr = nullptr;
+    SingleNode *nodeClonePtr = nullptr;
     while(current != nullptr){
-        Node node = new Node(current->data);
+        SingleNode *node = new SingleNode(current->value);
         if(firstNode){
             headClone = node;
             nodeClonePtr = headClone;
@@ -304,17 +319,18 @@ LinkedList<T>* SingleLinkedList<T>::clone() const{
         }
         current = current->next;
     }
-    return new SingleLinkedList<T>(headClone);
+    return new SingleLinkedList<T>(headClone,size);
 }
 
 template <typename T>
 bool SingleLinkedList<T>::equals(const LinkedList<T>& other) const{
     if(size != other.getSize()) return false;
 
-    Node *current = head;
-    Node *compare_ptr = other.getHead();
+    SingleNode *current = head;
+    const SingleLinkedList<T> *otherSLL = dynamic_cast<const SingleLinkedList<T>*>(&other);
+    SingleNode *compare_ptr = otherSLL->getHead();
     while(current->next != nullptr){
-        if(current->data != compare_ptr->data)
+        if(current->value != compare_ptr->value)
             return false;
         
         current = current->next;
@@ -326,8 +342,9 @@ bool SingleLinkedList<T>::equals(const LinkedList<T>& other) const{
 
 template <typename T>
 void SingleLinkedList<T>::swap(LinkedList<T>& other){
-    Node *current = head;
-    Node *temp = other.getHead();
+    SingleNode *current = head;
+    const SingleLinkedList<T> *otherSLL = dynamic_cast<const SingleLinkedList<T>*>(&other);
+    SingleNode *temp = otherSLL->getHead();
     head->next = temp;
     temp->next = current;
 }
@@ -337,7 +354,7 @@ T SingleLinkedList<T>::mid() const{
     if(head == nullptr) return T();
 
     int midPosition = size/2;
-    Node *current = head;
+    SingleNode *current = head;
     while(midPosition >= 0){
         current = current->next;
         --midPosition;
@@ -346,6 +363,6 @@ T SingleLinkedList<T>::mid() const{
 }
 
 template <typename T>
-SingleLinkedList<T>::Node* SingleLinkedList<T>::getHead() const{
+typename SingleLinkedList<T>::SingleNode* SingleLinkedList<T>::getHead() const{
     return head;
 }

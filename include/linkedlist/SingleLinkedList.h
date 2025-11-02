@@ -4,16 +4,16 @@
 template <typename T>
 class SingleLinkedList : public LinkedList<T> {
     private:
-        struct Node {
-            T data;
-            Node* next;
-            Node(const T& value) : data(value), next(nullptr) {}
+        struct SingleNode : public LinkedList<T>::BaseNode {
+            SingleNode* next;
+            SingleNode(const T& value) : LinkedList<T>::BaseNode(value), next(nullptr) {}
         };
-        Node* head;
+        SingleNode* head;
         int size;
    public:
         //Contructor/Destructor
         SingleLinkedList() : head(nullptr), size(0) {}
+        SingleLinkedList(SingleNode *head, int size) : head(head), size(size) {}
         ~SingleLinkedList() override {
             clear();
         }
@@ -24,16 +24,16 @@ class SingleLinkedList : public LinkedList<T> {
         void pop_back() override;
         void remove(const T& value) override;
         bool contains(const T& value) const override;
-        Node* find(const T& value) const override;
+        SingleNode* find(const T& value) const override;
         T front() const override;
         T back() const override;
         void clear() override;
         int getSize() const override;
         bool isEmpty() const override;
         T at(int index) const override;
-        void indexOf(const T& value) override;
+        int indexOf(const T& value) override;
         void insert(int index, const T& value) override;
-        void removeAt(const T& value) override;
+        void removeAt(int index) override;
         void reverse() override;
         void sort() override;
         void unique() override;
@@ -45,7 +45,7 @@ class SingleLinkedList : public LinkedList<T> {
         bool equals(const LinkedList<T>& other) const override;
         void swap(LinkedList<T>& other) override;
         T mid() const override;
-        Node* getHead() const override;
+        SingleNode* getHead() const override;
 };
 
 #include "detail/SingleLinkedList.tpp"
