@@ -1,5 +1,6 @@
 #pragma once
 #include "../../../include/linkedlist/SingleLinkedList.h"
+#include "../../../include/linkedlist/exception/LinkedListException.h"
 #include <iostream>
 
 template <typename T>
@@ -29,7 +30,9 @@ void SingleLinkedList<T>::push_back(const T& value){
 
 template <typename T>
 void SingleLinkedList<T>::pop_front(){
-    if(head == nullptr) return;
+    if(head == nullptr) {
+        throw EmptyListException("List is empty");
+    }
 
     SingleNode *temp = head;
     head = head->next;

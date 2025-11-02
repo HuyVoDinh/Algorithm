@@ -3,11 +3,13 @@
 
 template <typename T>
 class SingleLinkedList : public LinkedList<T> {
-    private:
+    public:
         struct SingleNode : public LinkedList<T>::BaseNode {
             SingleNode* next;
             SingleNode(const T& value) : LinkedList<T>::BaseNode(value), next(nullptr) {}
         };
+    private:
+        
         SingleNode* head;
         int size;
    public:
