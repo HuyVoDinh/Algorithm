@@ -111,6 +111,267 @@ TEST_F(SingleLinkedListTextFixture, PopFront_NonEmptyList_ManyElements) {
     EXPECT_EQ(list.getSize(), curSize);
 }
 
+TEST(SingleLinkedListTest, PopBack_EmptyList_ThrowException){
+    SingleLinkedList<int> list;
+
+    EXPECT_THROW(list.pop_back(), EmptyListException);
+}
+
+TEST(SingleLinkedListTest, PopBack_OneElement_EmptyList){
+    SingleLinkedList<int> list;
+    list.push_front(10);
+
+    list.pop_back();
+    EXPECT_EQ(list.getHead(),nullptr);
+    EXPECT_EQ(list.getSize(),0);
+}
+
+TEST_F(SingleLinkedListTextFixture, PopBack_ManyElement_RemoveEndElement){
+    int curSize = list.getSize();
+    list.pop_back();
+    curSize--;
+
+    SingleLinkedList<int>::SingleNode *finalNode = list.getHead();
+    while(finalNode != nullptr)
+    {
+        finalNode = finalNode->next;
+    }
+
+    EXPECT_EQ(finalNode, nullptr);
+    EXPECT_EQ(curSize, list.getSize());
+}
+
+TEST(SingleLinkedListTest, Remove_OneElement_RemoveValidElement){
+    SingleLinkedList<int> list;
+    list.push_back(10);
+
+    EXPECT_EQ(list.remove(10), true);
+    EXPECT_EQ(list.getHead(), nullptr);
+    EXPECT_EQ(list.getSize(), 0);
+}
+
+TEST_F(SingleLinkedListTextFixture, Remove_ManyElement_RemoveValidElementAtFirst){
+    bool result = list.remove(10);
+
+    SingleLinkedList<int>::SingleNode *isLinked = list.getHead();
+    while(isLinked != nullptr){
+        isLinked = isLinked->next;
+    }
+
+    EXPECT_EQ(result, true);
+    EXPECT_EQ(isLinked, nullptr);
+    EXPECT_EQ(list.getHead()->value,20);
+    EXPECT_EQ(list.getSize(), 2);
+}
+
+TEST_F(SingleLinkedListTextFixture, Remove_ManyElement_RemoveValidElementAtMid){
+    bool result = list.remove(20);
+
+    SingleLinkedList<int>::SingleNode *isLinked = list.getHead();
+    while(isLinked != nullptr){
+        isLinked = isLinked->next;
+    }
+
+    EXPECT_EQ(result, true);
+    EXPECT_EQ(isLinked, nullptr);
+    EXPECT_EQ(list.getHead()->value,10);
+    EXPECT_EQ(list.getSize(), 2);
+}
+
+TEST_F(SingleLinkedListTextFixture, Remove_ManyElement_RemoveValidElementAtEnd){
+    bool result = list.remove(30);
+
+    SingleLinkedList<int>::SingleNode *isLinked = list.getHead();
+    while(isLinked != nullptr){
+        isLinked = isLinked->next;
+    }
+
+    EXPECT_EQ(result, true);
+    EXPECT_EQ(isLinked, nullptr);
+    EXPECT_EQ(list.getHead()->value,10);
+    EXPECT_EQ(list.getSize(), 2);
+}
+
+TEST(SingleLinkedListTest, Remove_EmptyList_ThrowException){
+    SingleLinkedList<int> list;
+
+    EXPECT_THROW(list.remove(5),EmptyListException);
+}
+
+TEST_F(SingleLinkedListTextFixture, Remove_ManyElement_RemoveInvalidElement){
+    bool result = list.remove(15);
+
+    SingleLinkedList<int>::SingleNode *isLinked = list.getHead();
+    while(isLinked != nullptr){
+        isLinked = isLinked->next;
+    }
+
+    EXPECT_EQ(result, false);
+    EXPECT_EQ(isLinked, nullptr);
+    EXPECT_EQ(list.getHead()->value,10);
+    EXPECT_EQ(list.getSize(), 3);
+}
+
+TEST(SingleLinkedListTest, Contains_EmptyList_ThrowException){
+    SingleLinkedList<int> list;
+
+    EXPECT_THROW(list.contains(5), EmptyListException);
+}
+
+TEST_F(SingleLinkedListTextFixture, Contains_ManyElement_ValidValue){
+    EXPECT_EQ(list.contains(20),true);
+}
+
+TEST_F(SingleLinkedListTextFixture, Contains_ManyElement_InvalidValue){
+    EXPECT_EQ(list.contains(15),false);
+}
+
+TEST(SingleLinkedListTest, Find_EmptyList_ThrowException){
+    SingleLinkedList<int> list;
+
+    EXPECT_THROW(list.find(5), EmptyListException);
+}
+
+TEST_F(SingleLinkedListTextFixture, Find_ManyElement_ValidValue){
+    EXPECT_EQ(list.find(20)->value,20);
+}
+
+TEST_F(SingleLinkedListTextFixture, Find_ManyElement_InvalidValue){
+    EXPECT_EQ(list.find(25)->value,nullptr);
+}
+
+TEST(SingleLinkedListTest, Front_EmptyList_ThrowException){
+    SingleLinkedList<int> list;
+
+    EXPECT_THROW(list.front(), EmptyListException);
+}
+
+TEST_F(SingleLinkedListTextFixture, Front_ManyElement_ReturnFirstElement){
+    EXPECT_EQ(list.front(), 10);
+}
+
+TEST(SingleLinkedListTest, Back_EmptyList_ThrowException){
+    SingleLinkedList<int> list;
+
+    EXPECT_THROW(list.back(), EmptyListException);
+}
+
+TEST_F(SingleLinkedListTextFixture, Back_ManyElement_ReturnEndElement){
+    EXPECT_EQ(list.back(), 30);
+}
+
+TEST_F(SingleLinkedListTextFixture, Clear_ManyElement_ClearAllElement){
+    list.clear();
+
+    EXPECT_EQ(list.getHead(), nullptr);
+    EXPECT_EQ(list.getSize(), 0);
+}
+
+TEST(SingleLinkedListTest, GetSize_EmptyList_ReturnSize){
+    SingleLinkedList<int> list;
+
+    EXPECT_EQ(list.getSize(), 0);
+}
+
+TEST_F(SingleLinkedListTextFixture, GetSize_ManyElement_ReturnSize){
+    EXPECT_EQ(list.getSize(), 3);
+}
+
+TEST(SingleLinkedListTest, IsEmpty_EmptyList_ReturnEmpty){
+    SingleLinkedList<int> list;
+
+    EXPECT_EQ(list.isEmpty(), true);
+}
+
+TEST_F(SingleLinkedListTextFixture, IsEmpty_ManyElement_IsNotEmpty){
+    EXPECT_EQ(list.isEmpty(), false);
+}
+
+TEST(SingleLinkedListTest, At_EmptyList_ThrowException){
+    SingleLinkedList<int> list;
+
+    EXPECT_THROW(list.at(0), EmptyListException);
+}
+
+TEST_F(SingleLinkedListTextFixture, At_NonEmptyList_InvalidIndex_ThrowException1){
+    EXPECT_THROW(list.at(-1), IndexOutOfRangeException);
+}
+
+TEST_F(SingleLinkedListTextFixture, At_NonEmptyList_InvalidIndex_ThrowException2){
+    EXPECT_THROW(list.at(list.getSize()+1), IndexOutOfRangeException);
+}
+
+TEST_F(SingleLinkedListTextFixture, At_NonEmptyList_ValidIndex_ReturnValue){
+    EXPECT_EQ(list.at(1), 20);
+}
+
+TEST_F(SingleLinkedListTextFixture, IndexOf_NonEmptyList_ValidValue_ReturnIndex){
+    EXPECT_EQ(list.indexOf(20), 1);
+}
+
+TEST_F(SingleLinkedListTextFixture, IndexOf_NonEmptyList_InvalidValue_ReturnNonIndex){
+    EXPECT_EQ(list.indexOf(25), -1);
+}
+
+TEST(SingleLinkedListTest, IndexOf_EmptyList_ThrowException){
+    SingleLinkedList<int> list;
+
+    EXPECT_THROW(list.indexOf(1), EmptyListException);
+}
+
+TEST_F(SingleLinkedListTextFixture, Insert_NonEmpty_InvalidIndex_ThrowException1){
+    EXPECT_THROW(list.insert(-1, 40), IndexOutOfRangeException);
+}
+
+TEST_F(SingleLinkedListTextFixture, Insert_NonEmpty_InvalidIndex_ThrowException2){
+    EXPECT_THROW(list.insert(list.getSize() + 1, 40), IndexOutOfRangeException);
+}
+
+TEST_F(SingleLinkedListTextFixture, Insert_NonEmpty_ValidIndex_FirstIndex){
+    int curSize = list.getSize();
+    list.insert(0, 40);
+    curSize++;
+
+    SingleLinkedList<int>::SingleNode *current = list.getHead();
+    while(current != nullptr){
+        current = current->next;
+    }
+
+    EXPECT_EQ(current, nullptr);
+    EXPECT_EQ(list.getHead()->value, 40);
+    EXPECT_EQ(list.getSize(), curSize);
+}
+
+TEST_F(SingleLinkedListTextFixture, Insert_NonEmpty_ValidIndex_FinalIndex){
+    int curSize = list.getSize();
+    list.insert(list.getSize(), 40);
+    curSize++;
+
+    SingleLinkedList<int>::SingleNode *current = list.getHead();
+    while(current->next != nullptr){
+        current = current->next;
+    }
+
+    EXPECT_EQ(current->next, nullptr);
+    EXPECT_EQ(current->value, 40);
+    EXPECT_EQ(list.getHead()->value, 10);
+    EXPECT_EQ(list.getSize(), curSize);
+}
+
+TEST_F(SingleLinkedListTextFixture, Insert_NonEmpty_ValidIndex_RandomIndex){
+    int curSize = list.getSize();
+    list.insert(1, 40);
+    curSize++;
+
+    SingleLinkedList<int>::SingleNode *current = list.getHead();
+    while(current != nullptr){
+        current = current->next;
+    }
+
+    EXPECT_EQ(current, nullptr);
+    EXPECT_EQ(list.indexOf(40), 1);
+    EXPECT_EQ(list.getSize(), curSize);
+}
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);

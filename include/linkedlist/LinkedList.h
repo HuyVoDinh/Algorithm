@@ -15,7 +15,7 @@ class LinkedList {
         virtual void push_back(const T& value) = 0;
         virtual void pop_front() = 0;
         virtual void pop_back() = 0;
-        virtual void remove(const T& value) = 0;
+        virtual bool remove(const T& value) = 0;
         virtual bool contains(const T& value) const = 0;
         virtual BaseNode* find(const T& value) const = 0;
         virtual T front() const = 0;

@@ -60,12 +60,12 @@ void SingleLinkedList<T>::pop_back(){
 }
 
 template <typename T>
-void SingleLinkedList<T>::remove(const T& value){
+bool SingleLinkedList<T>::remove(const T& value){
     if(head != nullptr){
         SingleNode* current = head;
         if(head->value == value){
             pop_front();
-            return;
+            return true;
         }
         else{
             SingleNode *previous = current;
@@ -78,9 +78,11 @@ void SingleLinkedList<T>::remove(const T& value){
                 delete current;
                 current = nullptr;
                 --size;
+                return true;
             }
         }
     }
+    return false;
 }
 
 template <typename T>
