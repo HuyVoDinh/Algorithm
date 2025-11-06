@@ -37,7 +37,7 @@ class SingleLinkedList : public LinkedList<T> {
         void insert(int index, const T& value) override;
         void removeAt(int index) override;
         void reverse() override;
-        void sort() override;
+        void sort(bool isDesc = false) override;
         void unique() override;
         std::vector<T> toVector() const override;
         void merge(LinkedList<T>& other) override;

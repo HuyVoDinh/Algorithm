@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "linkedlist/singlelinkedlist.h"
 #include "../../../include/linkedlist/exception/LinkedListException.h"
-
+#include <vector>
 #include <iostream>
 TEST(SingleLinkedListTest, Constructor1_P) {
     SingleLinkedList<int> list;
@@ -237,7 +237,7 @@ TEST_F(SingleLinkedListTextFixture, Find_ManyElement_ValidValue){
 }
 
 TEST_F(SingleLinkedListTextFixture, Find_ManyElement_InvalidValue){
-    EXPECT_EQ(list.find(25)->value,nullptr);
+    EXPECT_EQ(list.find(25),nullptr);
 }
 
 TEST(SingleLinkedListTest, Front_EmptyList_ThrowException){
@@ -371,6 +371,234 @@ TEST_F(SingleLinkedListTextFixture, Insert_NonEmpty_ValidIndex_RandomIndex){
     EXPECT_EQ(current, nullptr);
     EXPECT_EQ(list.indexOf(40), 1);
     EXPECT_EQ(list.getSize(), curSize);
+}
+
+TEST_F(SingleLinkedListTextFixture, RemoveAt_NonEmpty_InValidIndex) {
+    EXPECT_THROW(list.removeAt(-1), IndexOutOfRangeException);
+    EXPECT_THROW(list.removeAt(list.getSize()+1), IndexOutOfRangeException);
+}
+
+TEST(SingleLinkedListTest, RemoveAt_OneElement) {
+    SingleLinkedList<int> list;
+    list.push_back(10);
+
+    EXPECT_NO_THROW(list.removeAt(0));
+    EXPECT_EQ(list.getSize(), 0);
+    EXPECT_EQ(list.getHead(), nullptr);
+}
+
+TEST_F(SingleLinkedListTextFixture, RemoveAt_NonEmpty_RemoveFirstIndex){
+    SingleLinkedList<int>::SingleNode *secondNode = list.getHead()->next; 
+
+    EXPECT_NO_THROW(list.removeAt(0));
+    EXPECT_EQ(list.getSize(),2);
+    EXPECT_EQ(list.getHead(), secondNode);
+}
+
+TEST_F(SingleLinkedListTextFixture, RemoveAt_NonEmpty_RemoveLastIndex) {
+    EXPECT_NO_THROW(list.removeAt(2));
+    EXPECT_EQ(list.getSize(),2);
+
+    SingleLinkedList<int>::SingleNode *node = list.getHead();
+    while (node != nullptr) {
+        node = node->next;
+    }
+    EXPECT_EQ(node, nullptr);
+}
+
+TEST_F(SingleLinkedListTextFixture, RemoveAt_NonEmpty_RemoveMidIndex) {
+    EXPECT_NO_THROW(list.removeAt(1));
+    EXPECT_EQ(list.getSize(),2);
+
+    SingleLinkedList<int>::SingleNode *node = list.getHead();
+    while (node != nullptr) {
+        node = node->next;
+    }
+    EXPECT_EQ(node, nullptr);
+}
+
+TEST(SingleLinkedListTest, Reverse_EmptyList_ThrowException){
+    SingleLinkedList<int> list;
+    EXPECT_THROW(list.reverse(), EmptyListException);
+}
+
+TEST_F(SingleLinkedListTextFixture, Reverse_NonEmpty){
+    EXPECT_NO_THROW(list.reverse());
+    std::vector<int> v = list.toVector();
+
+    EXPECT_EQ(v.size(), 3);
+    EXPECT_EQ(v[0], 30);
+    EXPECT_EQ(v[1], 20);
+    EXPECT_EQ(v[2], 10);
+}
+
+TEST(SingleLinkedListTest, Sort_EmptyList_ThrowException){
+    SingleLinkedList<int> list;
+    EXPECT_THROW(list.sort(), EmptyListException);
+}
+
+TEST_F(SingleLinkedListTextFixture, Sort_NonEmptyList_Desc){
+    EXPECT_NO_THROW(list.sort(true));
+
+    EXPECT_EQ(list.getHead()->value, 30);
+    EXPECT_EQ(list.getSize(), 3);
+    std::vector<int> v = list.toVector();
+
+    EXPECT_EQ(v.size(), 3);
+    EXPECT_EQ(v[0], 30);
+    EXPECT_EQ(v[1], 20);
+    EXPECT_EQ(v[2], 10);
+}
+
+TEST_F(SingleLinkedListTextFixture, Sort_NonEmptyList_Incr){
+    EXPECT_NO_THROW(list.sort());
+    EXPECT_EQ(list.getHead()->value, 10);
+    EXPECT_EQ(list.getSize(), 3);
+    std::vector<int> v = list.toVector();
+
+    EXPECT_EQ(v.size(), 3);
+    EXPECT_EQ(v[0], 10);
+    EXPECT_EQ(v[1], 20);
+    EXPECT_EQ(v[2], 30);
+}
+
+TEST(SingleLinkedListTest, Unique_EmptyList_ThrowException) {
+    SingleLinkedList<int> list;
+    EXPECT_THROW(list.unique(), EmptyListException);
+}
+
+TEST(SingleLinkedListTest, Unique_NonEmptyList_UniqueElement) {
+    SingleLinkedList<int> list;
+
+    list.push_front(10);
+    list.push_front(10);
+    list.push_front(20);
+    list.push_front(20);
+    list.push_front(30);
+
+    EXPECT_NO_THROW(list.unique());
+    EXPECT_EQ(list.getHead()->value, 10);
+    EXPECT_EQ(list.getSize(), 3);
+    std::vector<int> v = list.toVector();
+    EXPECT_EQ(v.size(), 3);
+    EXPECT_EQ(v[0], 30);
+    EXPECT_EQ(v[1], 20);
+    EXPECT_EQ(v[2], 10);
+}
+
+TEST(SingleLinkedListTest, ToVector_EmptyList_ThrowException) {
+    SingleLinkedList<int> list;
+    EXPECT_THROW(list.toVector(), EmptyListException);
+}
+
+TEST_F(SingleLinkedListTextFixture, ToVector_NonEmptyList_ConvertToVector) {
+    std::vector<int> v = list.toVector();
+
+    EXPECT_EQ(v.size(), 3);
+    EXPECT_EQ(v[0], 10);
+    EXPECT_EQ(v[1], 20);
+    EXPECT_EQ(v[2], 30);
+}
+
+TEST(SingleLinkedListTest, Merge_EmptyList_ThrowException){
+    SingleLinkedList<int>list;
+    SingleLinkedList<int> list2;
+    EXPECT_THROW(list.merge(list2), EmptyListException);
+    list.push_back(10);
+    EXPECT_THROW(list.merge(list2), EmptyListException);
+}
+
+TEST_F(SingleLinkedListTextFixture, Merge_NonEmpty_MergeTwoLinkedList) {
+    SingleLinkedList<int> list2;
+    list2.push_front(30);
+    list2.push_front(20);
+    list2.push_front(10);
+
+    EXPECT_NO_THROW(list.merge(list2));
+    EXPECT_EQ(list.getSize(), 6);
+    EXPECT_EQ(list.getHead()->value,10);
+    EXPECT_EQ(list2.getHead(), nullptr);
+    std::vector<int> v = list.toVector();
+    EXPECT_EQ(v[0], 10);
+    EXPECT_EQ(v[1], 20);
+    EXPECT_EQ(v[2], 30);
+    EXPECT_EQ(v[3], 10);
+    EXPECT_EQ(v[4], 20);
+    EXPECT_EQ(v[5], 30);
+}
+
+TEST_F(SingleLinkedListTextFixture, Print_NonEmpty){
+    EXPECT_NO_THROW(list.print());
+}
+
+TEST_F(SingleLinkedListTextFixture, CopyFrom_NonEmpty_CopyFromEmpty_ThrowException){
+    SingleLinkedList<int> list2;
+    EXPECT_THROW(list.copyFrom(list2), EmptyListException);
+}
+
+TEST_F(SingleLinkedListTextFixture, CopyFrom_NonEmpty_CopyFromOtherLinkedList1) {
+    SingleLinkedList<int> list2;
+    list2.push_front(50);
+    list2.push_front(60);
+    list2.push_front(70);
+    list2.push_front(80);
+
+    EXPECT_NO_THROW(list.copyFrom(list2));
+    EXPECT_EQ(list.getSize(), 4);
+    EXPECT_EQ(list.getHead()->value, 80);
+    std::vector<int> v = list2.toVector();
+    EXPECT_EQ(v[0], 80);
+    EXPECT_EQ(v[1], 70);
+    EXPECT_EQ(v[2], 60);
+    EXPECT_EQ(v[3], 50);
+    EXPECT_NE(list.getHead(), list2.getHead());
+}
+
+TEST_F(SingleLinkedListTextFixture, CopyFrom_NonEmpty_CopyFromOtherLinkedList2) {
+    SingleLinkedList<int> list2;
+    list2.push_front(50);
+    list2.push_front(60);
+
+    EXPECT_NO_THROW(list.copyFrom(list2));
+    EXPECT_EQ(list.getSize(), 5);
+    EXPECT_EQ(list.getHead()->value, 60);
+    std::vector<int> v = list2.toVector();
+    EXPECT_EQ(v[0], 60);
+    EXPECT_EQ(v[1], 50);
+    EXPECT_NE(list.getHead(), list2.getHead());
+}
+
+TEST_F(SingleLinkedListTextFixture, CopyFrom_NonEmpty_CopyFromOtherLinkedList3) {
+    SingleLinkedList<int> list2;
+    list2.push_front(50);
+    list2.push_front(60);
+    list2.push_front(70);
+
+    EXPECT_NO_THROW(list.copyFrom(list2));
+    EXPECT_EQ(list.getSize(), 3);
+    EXPECT_EQ(list.getHead()->value, 70);
+    std::vector<int> v = list2.toVector();
+    EXPECT_EQ(v[0], 70);
+    EXPECT_EQ(v[1], 60);
+    EXPECT_EQ(v[2], 50);
+    EXPECT_NE(list.getHead(), list2.getHead());
+}
+
+TEST(SingleLinkedListTest, CopyFrom_NonEmpty_CopyFromOtherLinkedList4) {
+    SingleLinkedList<int> list;
+    SingleLinkedList<int> list2;
+    list2.push_front(50);
+    list2.push_front(60);
+    list2.push_front(70);
+
+    EXPECT_NO_THROW(list.copyFrom(list2));
+    EXPECT_EQ(list.getSize(), 3);
+    EXPECT_EQ(list.getHead()->value, 70);
+    std::vector<int> v = list2.toVector();
+    EXPECT_EQ(v[0], 70);
+    EXPECT_EQ(v[1], 60);
+    EXPECT_EQ(v[2], 50);
+    EXPECT_NE(list.getHead(), list2.getHead());
 }
 
 int main(int argc, char **argv) {

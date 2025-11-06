@@ -237,7 +237,7 @@ void SingleLinkedList<T>::reverse(){
 }
 
 template <typename T>
-void SingleLinkedList<T>::sort(){
+void SingleLinkedList<T>::sort(bool isDesc = false){
 
 }
 

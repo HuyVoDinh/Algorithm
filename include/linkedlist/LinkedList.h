@@ -28,7 +28,7 @@ class LinkedList {
         virtual void insert(int index, const T& value) = 0;
         virtual void removeAt(int index) = 0;
         virtual void reverse() = 0;
-        virtual void sort() = 0;
+        virtual void sort(bool isDesc = false) = 0;
         virtual void unique() = 0;
         virtual std::vector<T> toVector() const = 0;
         virtual void merge(LinkedList<T>& other) = 0;
