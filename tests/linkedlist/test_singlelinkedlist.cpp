@@ -28,6 +28,7 @@ class SingleLinkedListTextFixture : public ::testing::Test{
         SingleLinkedList<int> list;
 
         void SetUp() override{
+            std::cout << "Debug\n";
             list.push_back(10);
             list.push_back(20);
             list.push_back(30);
@@ -40,7 +41,7 @@ class SingleLinkedListTextFixture : public ::testing::Test{
 
 TEST(SingleLinkedListTest, PushFront_EmptyList){
     SingleLinkedList<int> list;
-    list.push_back(10);
+    list.push_front(10);
 
     EXPECT_EQ(list.getHead()->value, 10);
     EXPECT_EQ(list.getSize(), 1);
@@ -50,7 +51,7 @@ TEST(SingleLinkedListTest, PushFront_EmptyList){
 
 TEST_F(SingleLinkedListTextFixture,PushFront_NonEmptyList) {
     int curSize = list.getSize();
-    list.push_back(5);
+    list.push_front(5);
     curSize++;
 
     EXPECT_EQ(list.getHead()->value,5);
@@ -477,10 +478,9 @@ TEST(SingleLinkedListTest, Unique_NonEmptyList_UniqueElement) {
     list.push_front(30);
 
     EXPECT_NO_THROW(list.unique());
-    EXPECT_EQ(list.getHead()->value, 10);
+    EXPECT_EQ(list.getHead()->value, 30);
     EXPECT_EQ(list.getSize(), 3);
     std::vector<int> v = list.toVector();
-    EXPECT_EQ(v.size(), 3);
     EXPECT_EQ(v[0], 30);
     EXPECT_EQ(v[1], 20);
     EXPECT_EQ(v[2], 10);

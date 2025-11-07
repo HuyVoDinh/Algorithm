@@ -2,6 +2,8 @@
 #include "../../../include/linkedlist/SingleLinkedList.h"
 #include "../../../include/linkedlist/exception/LinkedListException.h"
 #include <iostream>
+#include <map>
+#include <vector>
 
 template <typename T>
 void SingleLinkedList<T>::push_front(const T &value)
@@ -228,6 +230,9 @@ int SingleLinkedList<T>::indexOf(const T &value)
 template <typename T>
 void SingleLinkedList<T>::insert(int index, const T &value)
 {
+    if (index < 0 || index > size)
+        throw IndexOutOfRangeException("Index out of range");
+
     SingleNode *node = new SingleNode(value);
     SingleNode *current = head;
 
@@ -256,12 +261,12 @@ void SingleLinkedList<T>::insert(int index, const T &value)
 template <typename T>
 void SingleLinkedList<T>::removeAt(int index)
 {
-    if (index > size)
-        return;
+    if (index < 0 || index > size)
+        throw IndexOutOfRangeException("Index out of range");
 
     if (index == 0)
     {
-        pop_back();
+        pop_front();
         return;
     }
     else
@@ -284,34 +289,80 @@ void SingleLinkedList<T>::removeAt(int index)
 template <typename T>
 void SingleLinkedList<T>::reverse()
 {
-    SingleNode *current = head;
-    SingleNode *previous = nullptr;
-    SingleNode *nextPtr = head->next;
-    previous->next = nullptr;
-    while (nextPtr->next != nullptr)
-    {
-        previous = current;
-        current = nextPtr;
-        nextPtr = nextPtr->next;
-        current->next = previous;
+    if (head == nullptr)
+        throw EmptyListException("Empty list exception");
+
+    std::vector<T> v;
+    SingleLinkedList<T>::SingleNode *current = head;
+    while(current != nullptr) {
+        v.push_back(current->value);
+        current = current->next;
     }
-    nextPtr->next = current;
-    head = nextPtr;
+
+    current = head;
+    for(int i = v.size()-1; i >= 0; i--){
+        current->value = v[i];
+        current = current->next;
+    }
 }
 
 template <typename T>
 void SingleLinkedList<T>::sort(bool isDesc)
 {
+    if (head == nullptr)
+        throw EmptyListException("List is empty");
+
+    std::vector<T> v;
+    SingleNode *node = head;
+    while(node != nullptr){
+        v.push_back(node->value);
+        node = node->next;
+    }
+
+    if(isDesc){
+        std::sort(v.begin(), v.end(), std::greater<T>());
+    } else {
+        std::sort(v.begin(),v.end());
+    }
+
+    node = head;
+    for(T val : v){
+        node->value = val;
+        node = node->next;
+    }
 }
 
 template <typename T>
 void SingleLinkedList<T>::unique()
 {
+    if (head == nullptr)
+        throw EmptyListException("List is empty");
+
+    std::map<int,bool> map;
+
+    SingleNode *current = head;
+    SingleNode *previous = head;
+    while(current != nullptr) {
+        if(map.find(current->value) != map.end()) {
+            previous->next = current->next;
+            --size;
+            delete current;
+            current = previous;
+        }
+        else {
+            map[current->value] = true;
+        }
+        previous = current;
+        current = current->next;
+    }
 }
 
 template <typename T>
 std::vector<T> SingleLinkedList<T>::toVector() const
 {
+    if (head == nullptr)
+        throw EmptyListException("List is empty");
+
     std::vector<T> vec;
     SingleNode *current = head;
     while (current != nullptr)
@@ -325,25 +376,19 @@ std::vector<T> SingleLinkedList<T>::toVector() const
 template <typename T>
 void SingleLinkedList<T>::merge(LinkedList<T> &other)
 {
+    if (head == nullptr || other.getHead() == nullptr)
+        throw EmptyListException("List is empty");
+
     SingleNode *current = head;
     const SingleLinkedList<T> *otherSLL = dynamic_cast<const SingleLinkedList<T> *>(&other);
     SingleNode *mergePtr = otherSLL->getHead();
 
-    if (head == nullptr)
+    while (current->next != nullptr)
     {
-        head = mergePtr;
-        size = other.getSize();
-        return;
+        current = current->next;
     }
-    else
-    {
-        while (current->next != nullptr)
-        {
-            current = current->next;
-        }
-        current->next = mergePtr;
-        size += other.getSize();
-    }
+    current->next = mergePtr;
+    size += other.getSize();
 }
 
 template <typename T>
@@ -366,19 +411,11 @@ void SingleLinkedList<T>::copyFrom(const LinkedList<T> &other)
     const SingleLinkedList<T> *otherSLL = dynamic_cast<const SingleLinkedList<T> *>(&other);
     SingleNode *copiedPtr = otherSLL->getHead();
 
+    clear();
+    
     while (copiedPtr != nullptr)
     {
-        if (current->next != nullptr)
-        {
-            current->value = copiedPtr->value;
-        }
-        else
-        {
-            SingleNode *node = new SingleNode(copiedPtr->value);
-            current->next = node;
-        }
-
-        current = current->next;
+        push_back(copiedPtr->value);
         copiedPtr = copiedPtr->next;
     }
 }
@@ -386,6 +423,7 @@ void SingleLinkedList<T>::copyFrom(const LinkedList<T> &other)
 template <typename T>
 SingleLinkedList<T> *SingleLinkedList<T>::clone() const
 {
+    if (head == nullptr) throw EmptyListException("List is empty");
     return new SingleLinkedList<T>(*this);
 }
 
