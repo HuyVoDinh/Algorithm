@@ -601,6 +601,69 @@ TEST(SingleLinkedListTest, CopyFrom_NonEmpty_CopyFromOtherLinkedList4) {
     EXPECT_NE(list.getHead(), list2.getHead());
 }
 
+TEST(SingleLinkedListTest, Clone_EmptyList_ThrowException) {
+    SingleLinkedList<int> list;
+    EXPECT_THROW(list.clone(), EmptyListException);
+}
+
+TEST_F(SingleLinkedListTextFixture, Clone_NonEmpty_CloneList) {
+    LinkedList<int> *clone = new SingleLinkedList<int>();
+    clone = list.clone();
+    EXPECT_NE(clone->getHead(), list.getHead());
+    EXPECT_EQ(clone->getSize(), list.getSize());
+}
+
+TEST_F(SingleLinkedListTextFixture, Equals_CompareEqual){
+    SingleLinkedList<int> list2;
+    list2.push_back(10);
+    list2.push_back(20);
+    list2.push_back(30);
+
+    EXPECT_EQ(list.equals(list2), true);
+}
+
+TEST_F(SingleLinkedListTextFixture, Equals_CompareNotEqual){
+    SingleLinkedList<int> list2;
+    list2.push_back(10);
+    list2.push_back(20);
+    list2.push_back(35);
+
+    EXPECT_EQ(list.equals(list2), false);
+}
+
+TEST_F(SingleLinkedListTextFixture, Swap_SwapTwoLinkedList){
+    SingleLinkedList<int> list2;
+    list2.push_back(5);
+    list2.push_back(15);
+
+    SingleLinkedList<int>::SingleNode *node = list.getHead();
+    SingleLinkedList<int>::SingleNode *node2 = list2.getHead();
+    int size = list.getSize();
+    int size2 = list.getSize();
+
+
+    list.swap(list2);
+    EXPECT_EQ(list.getHead(), node2);
+    EXPECT_EQ(list2.getHead(), node);
+    EXPECT_EQ(list.getSize(), size2);
+    EXPECT_EQ(list2.getSize(), size);
+}
+
+TEST_F(SingleLinkedListTextFixture, Mid_GetMidElement){
+    int midValue = list.at(list.getSize()/2);
+
+    EXPECT_EQ(list.mid(), midValue);
+}
+
+TEST_F(SingleLinkedListTextFixture, GetHead_ReturnHead){
+    EXPECT_NO_THROW(list.getHead());
+}
+
+TEST(SingleLinkedListTest, GetHead_EmptyList){
+    SingleLinkedList<int> list;
+    EXPECT_EQ(list.getHead(), nullptr);
+}
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

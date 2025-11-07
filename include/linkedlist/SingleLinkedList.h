@@ -43,7 +43,7 @@ class SingleLinkedList : public LinkedList<T> {
         void merge(LinkedList<T>& other) override;
         void print() const override;
         void copyFrom(const LinkedList<T>& other) override;
-        LinkedList<T>* clone() const override;
+        SingleLinkedList<T>* clone() const override;
         bool equals(const LinkedList<T>& other) const override;
         void swap(LinkedList<T>& other) override;
         T mid() const override;
