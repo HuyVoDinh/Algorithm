@@ -1,9 +1,10 @@
 #pragma once
-#include "../../../include/linkedlist/SingleLinkedList.h"
-#include "../../../include/linkedlist/exception/LinkedListException.h"
+#include "linkedlist/SingleLinkedList.h"
+#include "linkedlist/exception/LinkedListException.h"
 #include <iostream>
 #include <map>
 #include <vector>
+#include <algorithm>
 
 template <typename T>
 void SingleLinkedList<T>::push_front(const T &value)

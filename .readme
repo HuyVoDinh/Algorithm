@@ -1,0 +1,13 @@
+Update include path to run by Extension
+1. File → Preferences → Settings
+2. Find: code-runner.executorMap and Edit in settings.json
+3. Change "cpp": "cd $dir && g++ $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt", to "cpp": "g++ -std=c++17 \"$fullFileName\" -I\"d:/Project/Algorithm/include\" -o \"$fileNameWithoutExt.exe\" && \"$dir/$fileNameWithoutExt.exe\"", 
+
+
+How to run tc
+1. CMD: g++ -std=c++17 tests/linkedlist/test_singlelinkedlist.cpp -Iinclude -Igoogletest/googletest/include -Lgoogletest/build/lib -lgtest -lgtest_main -pthread -o build/test_singlelinkedlist.exe
+2. .\build\test_singlelinkedlist.exe
+
+How to run gdb  to debug
+1. gdb build/test_singlelinkedlist.exe
+2. gdb run

@@ -1,5 +1,5 @@
 #pragma once
-#include "../linkedlist/LinkedList.h"
+#include "linkedlist/LinkedList.h"
 
 template <typename T>
 class SingleLinkedList : public LinkedList<T> {

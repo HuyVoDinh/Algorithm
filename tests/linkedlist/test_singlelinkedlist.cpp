@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include "linkedlist/singlelinkedlist.h"
-#include "../../../include/linkedlist/exception/LinkedListException.h"
+#include "linkedlist/exception/LinkedListException.h"
 #include <vector>
 #include <iostream>
 TEST(SingleLinkedListTest, Constructor1_P) {

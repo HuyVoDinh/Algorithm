@@ -1,4 +1,4 @@
-#include "../../include/linkedlist/SingleLinkedList.h"
+#include "linkedlist/SingleLinkedList.h"
 #include <iostream>
 
 int main()
