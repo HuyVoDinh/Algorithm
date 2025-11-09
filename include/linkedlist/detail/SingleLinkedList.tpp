@@ -370,6 +370,7 @@ std::vector<T> SingleLinkedList<T>::toVector() const
         vec.push_back(current->value);
         current = current->next;
     }
+
     return vec;
 }
 
@@ -380,15 +381,17 @@ void SingleLinkedList<T>::merge(LinkedList<T> &other)
         throw EmptyListException("List is empty");
 
     SingleNode *current = head;
-    const SingleLinkedList<T> *otherSLL = dynamic_cast<const SingleLinkedList<T> *>(&other);
-    SingleNode *mergePtr = otherSLL->getHead();
+    SingleLinkedList<T> *otherSLL = dynamic_cast<SingleLinkedList<T> *>(&other);
 
     while (current->next != nullptr)
     {
         current = current->next;
     }
-    current->next = mergePtr;
+    current->next = otherSLL->getHead();
     size += other.getSize();
+
+    otherSLL->head = nullptr;
+    otherSLL->size = 0;
 }
 
 template <typename T>
@@ -407,6 +410,9 @@ void SingleLinkedList<T>::print() const
 template <typename T>
 void SingleLinkedList<T>::copyFrom(const LinkedList<T> &other)
 {
+    if (other.getHead() == nullptr)
+        throw EmptyListException("List is empty");
+    
     SingleNode *current = head;
     const SingleLinkedList<T> *otherSLL = dynamic_cast<const SingleLinkedList<T> *>(&other);
     SingleNode *copiedPtr = otherSLL->getHead();
@@ -424,6 +430,7 @@ template <typename T>
 SingleLinkedList<T> *SingleLinkedList<T>::clone() const
 {
     if (head == nullptr) throw EmptyListException("List is empty");
+
     return new SingleLinkedList<T>(*this);
 }
 
@@ -436,7 +443,7 @@ bool SingleLinkedList<T>::equals(const LinkedList<T> &other) const
     SingleNode *current = head;
     const SingleLinkedList<T> *otherSLL = dynamic_cast<const SingleLinkedList<T> *>(&other);
     SingleNode *compare_ptr = otherSLL->getHead();
-    while (current->next != nullptr)
+    while (current != nullptr)
     {
         if (current->value != compare_ptr->value)
             return false;
@@ -452,26 +459,16 @@ template <typename T>
 void SingleLinkedList<T>::swap(LinkedList<T> &other)
 {
     SingleNode *current = head;
-    const SingleLinkedList<T> *otherSLL = dynamic_cast<const SingleLinkedList<T> *>(&other);
-    SingleNode *temp = otherSLL->getHead();
-    head->next = temp;
-    temp->next = current;
+    SingleLinkedList<T> *otherSLL = dynamic_cast< SingleLinkedList<T> *>(&other);
+    
+    std::swap(this->head, otherSLL->head);
+    std::swap(this->size, otherSLL->size);
 }
 
 template <typename T>
 T SingleLinkedList<T>::mid() const
 {
-    if (head == nullptr)
-        return T();
-
-    int midPosition = size / 2;
-    SingleNode *current = head;
-    while (midPosition >= 0)
-    {
-        current = current->next;
-        --midPosition;
-    }
-    return current->value;
+    return at(size/2);
 }
 
 template <typename T>

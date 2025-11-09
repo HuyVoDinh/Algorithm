@@ -16,6 +16,19 @@ class SingleLinkedList : public LinkedList<T> {
         //Contructor/Destructor
         SingleLinkedList() : head(nullptr), size(0) {}
         SingleLinkedList(SingleNode *head, int size) : head(head), size(size) {}
+        SingleLinkedList(const SingleLinkedList<T>& other)
+            : head(nullptr), size(0)
+        {
+            if (other.head == nullptr)
+                return;
+
+            SingleNode* current = other.head;
+            while (current != nullptr)
+            {
+                this->push_back(current->value);
+                current = current->next;
+            }
+        }
         ~SingleLinkedList() override {
             clear();
         }

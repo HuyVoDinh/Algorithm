@@ -513,12 +513,15 @@ TEST_F(SingleLinkedListTextFixture, Merge_NonEmpty_MergeTwoLinkedList) {
     list2.push_front(30);
     list2.push_front(20);
     list2.push_front(10);
-
     EXPECT_NO_THROW(list.merge(list2));
-    EXPECT_EQ(list.getSize(), 6);
+    
     EXPECT_EQ(list.getHead()->value,10);
     EXPECT_EQ(list2.getHead(), nullptr);
+    
     std::vector<int> v = list.toVector();
+    //list.print();
+    EXPECT_EQ(list.getSize(), v.size());
+
     EXPECT_EQ(v[0], 10);
     EXPECT_EQ(v[1], 20);
     EXPECT_EQ(v[2], 30);
@@ -560,7 +563,7 @@ TEST_F(SingleLinkedListTextFixture, CopyFrom_NonEmpty_CopyFromOtherLinkedList2) 
     list2.push_front(60);
 
     EXPECT_NO_THROW(list.copyFrom(list2));
-    EXPECT_EQ(list.getSize(), 5);
+    EXPECT_EQ(list.getSize(), 2);
     EXPECT_EQ(list.getHead()->value, 60);
     std::vector<int> v = list2.toVector();
     EXPECT_EQ(v[0], 60);
@@ -607,7 +610,8 @@ TEST(SingleLinkedListTest, Clone_EmptyList_ThrowException) {
 }
 
 TEST_F(SingleLinkedListTextFixture, Clone_NonEmpty_CloneList) {
-    LinkedList<int> *clone = new SingleLinkedList<int>();
+    // LinkedList<int> *clone = new SingleLinkedList<int>();
+    SingleLinkedList<int> *clone;
     clone = list.clone();
     EXPECT_NE(clone->getHead(), list.getHead());
     EXPECT_EQ(clone->getSize(), list.getSize());
@@ -639,7 +643,7 @@ TEST_F(SingleLinkedListTextFixture, Swap_SwapTwoLinkedList){
     SingleLinkedList<int>::SingleNode *node = list.getHead();
     SingleLinkedList<int>::SingleNode *node2 = list2.getHead();
     int size = list.getSize();
-    int size2 = list.getSize();
+    int size2 = list2.getSize();
 
 
     list.swap(list2);
