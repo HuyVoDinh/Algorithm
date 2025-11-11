@@ -237,9 +237,6 @@ void SingleLinkedList<T>::insert(int index, const T &value)
     SingleNode *node = new SingleNode(value);
     SingleNode *current = head;
 
-    if (index > size)
-        return;
-
     if (index == 0)
     {
         node->next = head;
@@ -295,13 +292,15 @@ void SingleLinkedList<T>::reverse()
 
     std::vector<T> v;
     SingleLinkedList<T>::SingleNode *current = head;
-    while(current != nullptr) {
+    while (current != nullptr)
+    {
         v.push_back(current->value);
         current = current->next;
     }
 
     current = head;
-    for(int i = v.size()-1; i >= 0; i--){
+    for (int i = v.size() - 1; i >= 0; i--)
+    {
         current->value = v[i];
         current = current->next;
     }
@@ -315,19 +314,24 @@ void SingleLinkedList<T>::sort(bool isDesc)
 
     std::vector<T> v;
     SingleNode *node = head;
-    while(node != nullptr){
+    while (node != nullptr)
+    {
         v.push_back(node->value);
         node = node->next;
     }
 
-    if(isDesc){
+    if (isDesc)
+    {
         std::sort(v.begin(), v.end(), std::greater<T>());
-    } else {
-        std::sort(v.begin(),v.end());
+    }
+    else
+    {
+        std::sort(v.begin(), v.end());
     }
 
     node = head;
-    for(T val : v){
+    for (T val : v)
+    {
         node->value = val;
         node = node->next;
     }
@@ -339,18 +343,21 @@ void SingleLinkedList<T>::unique()
     if (head == nullptr)
         throw EmptyListException("List is empty");
 
-    std::map<int,bool> map;
+    std::map<T, bool> map;
 
     SingleNode *current = head;
     SingleNode *previous = head;
-    while(current != nullptr) {
-        if(map.find(current->value) != map.end()) {
+    while (current != nullptr)
+    {
+        if (map.find(current->value) != map.end())
+        {
             previous->next = current->next;
             --size;
             delete current;
             current = previous;
         }
-        else {
+        else
+        {
             map[current->value] = true;
         }
         previous = current;
@@ -378,21 +385,29 @@ std::vector<T> SingleLinkedList<T>::toVector() const
 template <typename T>
 void SingleLinkedList<T>::merge(LinkedList<T> &other)
 {
-    if (head == nullptr || other.getHead() == nullptr)
-        throw EmptyListException("List is empty");
+    if (other.getHead() == nullptr)
+        return;
 
     SingleNode *current = head;
-    SingleLinkedList<T> *otherSLL = dynamic_cast<SingleLinkedList<T> *>(&other);
 
     while (current->next != nullptr)
     {
         current = current->next;
     }
-    current->next = otherSLL->getHead();
-    size += other.getSize();
+    try
+    {
+        SingleLinkedList<T> *otherSLL = dynamic_cast<SingleLinkedList<T> *>(&other);
+        current->next = otherSLL->getHead();
 
-    otherSLL->head = nullptr;
-    otherSLL->size = 0;
+        size += other.getSize();
+
+        otherSLL->head = nullptr;
+        otherSLL->size = 0;
+    }
+    catch (const std::bad_cast &e)
+    {
+        std::cerr << "Dynamic cast to SingleLinkedList failed: " << e.what() << std::endl;
+    }
 }
 
 template <typename T>
@@ -413,13 +428,19 @@ void SingleLinkedList<T>::copyFrom(const LinkedList<T> &other)
 {
     if (other.getHead() == nullptr)
         throw EmptyListException("List is empty");
-    
-    SingleNode *current = head;
-    const SingleLinkedList<T> *otherSLL = dynamic_cast<const SingleLinkedList<T> *>(&other);
-    SingleNode *copiedPtr = otherSLL->getHead();
 
+    SingleNode *current = head;
+    try
+    {
+        const SingleLinkedList<T> *otherSLL = dynamic_cast<const SingleLinkedList<T> *>(&other);
+        SingleNode *copiedPtr = otherSLL->getHead();
+    }
+    catch (const std::bad_cast &e)
+    {
+        std::cerr << "Dynamic cast to SingleLinkedList failed: " << e.what() << std::endl;
+    }
     clear();
-    
+
     while (copiedPtr != nullptr)
     {
         push_back(copiedPtr->value);
@@ -430,7 +451,8 @@ void SingleLinkedList<T>::copyFrom(const LinkedList<T> &other)
 template <typename T>
 SingleLinkedList<T> *SingleLinkedList<T>::clone() const
 {
-    if (head == nullptr) throw EmptyListException("List is empty");
+    if (head == nullptr)
+        throw EmptyListException("List is empty");
 
     return new SingleLinkedList<T>(*this);
 }
@@ -442,8 +464,16 @@ bool SingleLinkedList<T>::equals(const LinkedList<T> &other) const
         return false;
 
     SingleNode *current = head;
-    const SingleLinkedList<T> *otherSLL = dynamic_cast<const SingleLinkedList<T> *>(&other);
-    SingleNode *compare_ptr = otherSLL->getHead();
+    try
+    {
+        const SingleLinkedList<T> *otherSLL = dynamic_cast<const SingleLinkedList<T> *>(&other);
+        SingleNode *compare_ptr = otherSLL->getHead();
+    }
+    catch (const std::bad_cast &e)
+    {
+        std::cerr << "Dynamic cast to SingleLinkedList failed: " << e.what() << std::endl;
+    }
+
     while (current != nullptr)
     {
         if (current->value != compare_ptr->value)
@@ -460,16 +490,23 @@ template <typename T>
 void SingleLinkedList<T>::swap(LinkedList<T> &other)
 {
     SingleNode *current = head;
-    SingleLinkedList<T> *otherSLL = dynamic_cast< SingleLinkedList<T> *>(&other);
-    
-    std::swap(this->head, otherSLL->head);
-    std::swap(this->size, otherSLL->size);
+    try
+    {
+        SingleLinkedList<T> *otherSLL = dynamic_cast<SingleLinkedList<T> *>(&other);
+
+        std::swap(this->head, otherSLL->head);
+        std::swap(this->size, otherSLL->size);
+    }
+    catch (const std::bad_cast &e)
+    {
+        std::cerr << "Dynamic cast to SingleLinkedList failed: " << e.what() << std::endl;
+    }
 }
 
 template <typename T>
 T SingleLinkedList<T>::mid() const
 {
-    return at(size/2);
+    return at(size / 2);
 }
 
 template <typename T>

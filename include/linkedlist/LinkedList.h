@@ -8,7 +8,7 @@ class LinkedList {
                 BaseNode(const T& value) : value(value) {}
                 virtual ~BaseNode() = default;
         };
-        //Contructor/Destructor
+        //Constructor/Destructor
         virtual ~LinkedList() = default;
         //Function
         virtual void push_front(const T& value) = 0;

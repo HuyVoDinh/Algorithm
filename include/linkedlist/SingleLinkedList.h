@@ -13,7 +13,7 @@ class SingleLinkedList : public LinkedList<T> {
         SingleNode* head;
         int size;
    public:
-        //Contructor/Destructor
+        //Constructor/Destructor
         SingleLinkedList() : head(nullptr), size(0) {}
         SingleLinkedList(SingleNode *head, int size) : head(head), size(size) {}
         SingleLinkedList(const SingleLinkedList<T>& other)
@@ -22,7 +22,7 @@ class SingleLinkedList : public LinkedList<T> {
             if (other.head == nullptr)
                 return;
 
-            SingleNode* current = other.head;
+            SingleNode* current = new SingleNode(other.head->value);
             while (current != nullptr)
             {
                 this->push_back(current->value);
