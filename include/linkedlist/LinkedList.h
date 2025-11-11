@@ -39,4 +39,5 @@ class LinkedList {
         virtual void swap(LinkedList<T>& other) = 0;
         virtual T mid() const = 0;
         virtual BaseNode* getHead() const = 0;
+        virtual BaseNode* getTail() const = 0;
 };

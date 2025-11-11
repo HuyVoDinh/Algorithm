@@ -10,7 +10,6 @@ class DoubleLinkedList : public LinkedList<T> {
             DoubleNode(const T& value) : LinkedList<T>::BaseNode(value), next(nullptr) {}
         };
     private:
-        
         DoubleNode* head;
         DoubleNode* tail;
         int size;
@@ -21,7 +20,6 @@ class DoubleLinkedList : public LinkedList<T> {
         DoubleLinkedList(const DoubleLinkedList<T>& other)
             : head(nullptr), tail(nullptr), size(0)
         {
-
         }
         ~DoubleLinkedList() override {
             clear();

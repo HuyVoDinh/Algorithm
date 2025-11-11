@@ -11,6 +11,7 @@ class SingleLinkedList : public LinkedList<T> {
     private:
         
         SingleNode* head;
+        SingleNode* tail;
         int size;
    public:
         //Constructor/Destructor
@@ -61,6 +62,7 @@ class SingleLinkedList : public LinkedList<T> {
         void swap(LinkedList<T>& other) override;
         T mid() const override;
         SingleNode* getHead() const override;
+        SingleNode* getTail() const override;
 };
 
 #include "detail/SingleLinkedList.tpp"

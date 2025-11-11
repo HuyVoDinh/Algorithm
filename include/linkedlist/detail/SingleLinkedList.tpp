@@ -13,6 +13,9 @@ void SingleLinkedList<T>::push_front(const T &value)
     newNode->next = head;
     head = newNode;
     ++size;
+
+    if (head->next == nullptr)
+        tail = head;
 }
 
 template <typename T>
@@ -23,15 +26,12 @@ void SingleLinkedList<T>::push_back(const T &value)
     if (head == nullptr)
     {
         head = node;
+        tail = node;
     }
     else
     {
-        SingleNode *current = head;
-        while (current->next != nullptr)
-        {
-            current = current->next;
-        }
-        current->next = node;
+        tail->next = node;
+        tail = node;
     }
     ++size;
 }
@@ -46,6 +46,8 @@ void SingleLinkedList<T>::pop_front()
 
     SingleNode *temp = head;
     head = head->next;
+    if (head == nullptr)
+        tail = nullptr;
     delete temp;
     --size;
 }
@@ -56,9 +58,10 @@ void SingleLinkedList<T>::pop_back()
     if (head == nullptr)
         throw EmptyListException("List is empty");
 
-    if (head->next == nullptr)
+    if (tail->next == nullptr)
     {
-        delete head;
+        delete tail;
+        tail = nullptr;
         head = nullptr;
     }
     else
@@ -70,6 +73,7 @@ void SingleLinkedList<T>::pop_back()
         }
         delete current->next;
         current->next = nullptr;
+        tail = current;
     }
     --size;
 }
@@ -97,6 +101,9 @@ bool SingleLinkedList<T>::remove(const T &value)
         if (current->value == value)
         {
             previous->next = current->next;
+            if (current == tail)
+                tail = previous;
+
             delete current;
             current = nullptr;
             --size;
@@ -157,12 +164,7 @@ T SingleLinkedList<T>::back() const
     if (head == nullptr)
         throw EmptyListException("List is empty");
 
-    SingleNode *current = head;
-    while (current->next != nullptr)
-    {
-        current = current->next;
-    }
-    return current->value;
+    return tail->value;
 }
 
 template <typename T>
@@ -175,6 +177,7 @@ void SingleLinkedList<T>::clear()
         delete current;
         --size;
     }
+    tail = nullptr;
 }
 
 template <typename T>
@@ -198,11 +201,16 @@ T SingleLinkedList<T>::at(int index) const
     if (index < 0 || index >= size)
         throw IndexOutOfRangeException("Index out of range");
 
-    SingleNode *current = head;
-    while (current != nullptr && index > 0)
+    if (index == 0)
+        return head->value;
+
+    if (index == size)
+        return tail->value;
+
+    SingleNode *current = head->next;
+    for (int i = 1; i != index - 1; i++)
     {
         current = current->next;
-        --index;
     }
 
     return current != nullptr ? current->value : T();
@@ -239,8 +247,11 @@ void SingleLinkedList<T>::insert(int index, const T &value)
 
     if (index == 0)
     {
-        node->next = head;
-        head = node;
+        push_front(value);
+    }
+    else if (index == size)
+    {
+        push_back(value);
     }
     else
     {
@@ -265,7 +276,10 @@ void SingleLinkedList<T>::removeAt(int index)
     if (index == 0)
     {
         pop_front();
-        return;
+    }
+    else if (index == size)
+    {
+        pop_back();
     }
     else
     {
@@ -353,6 +367,10 @@ void SingleLinkedList<T>::unique()
         {
             previous->next = current->next;
             --size;
+            if (current == tail)
+            {
+                tail = previous;
+            }
             delete current;
             current = previous;
         }
@@ -388,20 +406,15 @@ void SingleLinkedList<T>::merge(LinkedList<T> &other)
     if (other.getHead() == nullptr)
         return;
 
-    SingleNode *current = head;
-
-    while (current->next != nullptr)
-    {
-        current = current->next;
-    }
     try
     {
         SingleLinkedList<T> *otherSLL = dynamic_cast<SingleLinkedList<T> *>(&other);
-        current->next = otherSLL->getHead();
-
+        tail->next = otherSLL->getHead();
+        tail = otherSLL->getTail();
         size += other.getSize();
 
         otherSLL->head = nullptr;
+        otherSLL->tail = nullptr;
         otherSLL->size = 0;
     }
     catch (const std::bad_cast &e)
@@ -434,17 +447,18 @@ void SingleLinkedList<T>::copyFrom(const LinkedList<T> &other)
     {
         const SingleLinkedList<T> *otherSLL = dynamic_cast<const SingleLinkedList<T> *>(&other);
         SingleNode *copiedPtr = otherSLL->getHead();
+
+        clear();
+
+        while (copiedPtr != nullptr)
+        {
+            push_back(copiedPtr->value);
+            copiedPtr = copiedPtr->next;
+        }
     }
     catch (const std::bad_cast &e)
     {
         std::cerr << "Dynamic cast to SingleLinkedList failed: " << e.what() << std::endl;
-    }
-    clear();
-
-    while (copiedPtr != nullptr)
-    {
-        push_back(copiedPtr->value);
-        copiedPtr = copiedPtr->next;
     }
 }
 
@@ -468,19 +482,19 @@ bool SingleLinkedList<T>::equals(const LinkedList<T> &other) const
     {
         const SingleLinkedList<T> *otherSLL = dynamic_cast<const SingleLinkedList<T> *>(&other);
         SingleNode *compare_ptr = otherSLL->getHead();
+
+        while (current != nullptr)
+        {
+            if (current->value != compare_ptr->value)
+                return false;
+
+            current = current->next;
+            compare_ptr = compare_ptr->next;
+        }
     }
     catch (const std::bad_cast &e)
     {
         std::cerr << "Dynamic cast to SingleLinkedList failed: " << e.what() << std::endl;
-    }
-
-    while (current != nullptr)
-    {
-        if (current->value != compare_ptr->value)
-            return false;
-
-        current = current->next;
-        compare_ptr = compare_ptr->next;
     }
 
     return true;
@@ -496,6 +510,7 @@ void SingleLinkedList<T>::swap(LinkedList<T> &other)
 
         std::swap(this->head, otherSLL->head);
         std::swap(this->size, otherSLL->size);
+        std::swap(this->tail, otherSLL->tail);
     }
     catch (const std::bad_cast &e)
     {
@@ -513,4 +528,10 @@ template <typename T>
 typename SingleLinkedList<T>::SingleNode *SingleLinkedList<T>::getHead() const
 {
     return head;
+}
+
+template <typename T>
+typename SingleLinkedList<T>::SingleNode *SingleLinkedList<T>::getTail() const
+{
+    return tail;
 }

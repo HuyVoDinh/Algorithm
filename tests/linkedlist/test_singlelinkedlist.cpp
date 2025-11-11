@@ -668,6 +668,21 @@ TEST(SingleLinkedListTest, GetHead_EmptyList){
     EXPECT_EQ(list.getHead(), nullptr);
 }
 
+TEST(SingleLinkedListTest, GetTail_EmptyList){
+    SingleLinkedList<int> list;
+    EXPECT_EQ(list.getTail(), nullptr);
+}
+
+TEST_F(SingleLinkedListTextFixture, GetTail_ReturnTail){
+    
+    SingleLinkedList<int>::SingleNode *node = list.getHead();
+    while (node->next != nullptr){
+        node = node->next;
+    }
+
+    EXPECT_EQ(node,list.getTail());
+}
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
