@@ -63,6 +63,7 @@ void SingleLinkedList<T>::pop_back()
         delete tail;
         tail = nullptr;
         head = nullptr;
+        size = 0;
     }
     else
     {
@@ -175,8 +176,8 @@ void SingleLinkedList<T>::clear()
         SingleNode *current = head;
         head = head->next;
         delete current;
-        --size;
     }
+    size = 0;
     tail = nullptr;
 }
 
@@ -198,7 +199,7 @@ T SingleLinkedList<T>::at(int index) const
     if (head == nullptr)
         throw EmptyListException("List is empty");
 
-    if (index < 0 || index >= size)
+    if (index < 0 || index > size)
         throw IndexOutOfRangeException("Index out of range");
 
     if (index == 0)
@@ -419,7 +420,7 @@ void SingleLinkedList<T>::merge(LinkedList<T> &other)
     }
     catch (const std::bad_cast &e)
     {
-        std::cerr << "Dynamic cast to SingleLinkedList failed: " << e.what() << std::endl;
+        throw LinkedListException("Can't cast to SingleLinkedList");
     }
 }
 
@@ -458,7 +459,7 @@ void SingleLinkedList<T>::copyFrom(const LinkedList<T> &other)
     }
     catch (const std::bad_cast &e)
     {
-        std::cerr << "Dynamic cast to SingleLinkedList failed: " << e.what() << std::endl;
+        throw LinkedListException("Can't cast to SingleLinkedList");
     }
 }
 
@@ -494,7 +495,7 @@ bool SingleLinkedList<T>::equals(const LinkedList<T> &other) const
     }
     catch (const std::bad_cast &e)
     {
-        std::cerr << "Dynamic cast to SingleLinkedList failed: " << e.what() << std::endl;
+        throw LinkedListException("Can't cast to SingleLinkedList");
     }
 
     return true;
@@ -514,7 +515,7 @@ void SingleLinkedList<T>::swap(LinkedList<T> &other)
     }
     catch (const std::bad_cast &e)
     {
-        std::cerr << "Dynamic cast to SingleLinkedList failed: " << e.what() << std::endl;
+        throw LinkedListException("Can't cast to SingleLinkedList");
     }
 }
 

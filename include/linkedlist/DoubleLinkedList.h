@@ -55,4 +55,4 @@ class DoubleLinkedList : public LinkedList<T> {
         DoubleNode* getHead() const override;
 };
 
-// #include "detail/SingleLinkedList.tpp"
+#include "detail/DoubleLinkedList.tpp"
