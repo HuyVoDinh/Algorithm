@@ -18,12 +18,12 @@ class SingleLinkedList : public LinkedList<T> {
         SingleLinkedList() : head(nullptr), size(0) {}
         SingleLinkedList(SingleNode *head, int size) : head(head), size(size) {}
         SingleLinkedList(const SingleLinkedList<T>& other)
-            : head(nullptr), size(0)
+            : head(nullptr), tail(nullptr), size(0)
         {
             if (other.head == nullptr)
                 return;
 
-            SingleNode* current = new SingleNode(other.head->value);
+            SingleNode* current = other.getHead();
             while (current != nullptr)
             {
                 this->push_back(current->value);
