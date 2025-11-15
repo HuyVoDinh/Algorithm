@@ -7,22 +7,25 @@
 #include <algorithm>
 
 template <typename T>
-void DoubleLinkedList<T>::push_front(const T& value) {
+void DoubleLinkedList<T>::push_front(const T &value)
+{
     DoubleLinkedList<T>::DoubleNode *newNode = new DoubleLinkedList<T>::DoubleNode(value);
 
     newNode->next = head;
-    if(head->next == nullptr)
+    if (head->next == nullptr)
         tail = head;
 
     ++size;
 }
 
 template <typename T>
-void DoubleLinkedList<T>::push_back(const T& value){
-    
-    if (head==nullptr)
+void DoubleLinkedList<T>::push_back(const T &value)
+{
+
+    if (head == nullptr)
         push_front(value);
-    else {
+    else
+    {
         DoubleLinkedList<T>::DoubleNode *newNode = new DoubleLinkedList<T>::DoubleNode(value);
 
         newNode->previous = tail;
@@ -33,14 +36,20 @@ void DoubleLinkedList<T>::push_back(const T& value){
 }
 
 template <typename T>
-void DoubleLinkedList<T>::pop_front() {
-    if(head == nullptr){
+void DoubleLinkedList<T>::pop_front()
+{
+    if (head == nullptr)
+    {
         throw EmptyListException("List is empty");
-    } else if (head == tail){
+    }
+    else if (head == tail)
+    {
         delete head;
         head = nullptr;
         tail = nullptr;
-    } else {
+    }
+    else
+    {
         DoubleLinkedList<T>::DoubleNode *current = head;
         head = head->next;
         delete current;
@@ -50,10 +59,14 @@ void DoubleLinkedList<T>::pop_front() {
 }
 
 template <typename T>
-void DoubleLinkedList<T>::pop_back() {
-    if(head == tail) {
+void DoubleLinkedList<T>::pop_back()
+{
+    if (head == tail)
+    {
         pop_front();
-    } else {
+    }
+    else
+    {
         DoubleLinkedList<T>::DoubleNode *current = tail;
         tail = tail->previous;
         delete current;
@@ -63,16 +76,24 @@ void DoubleLinkedList<T>::pop_back() {
 }
 
 template <typename T>
-bool DoubleLinkedList<T>::remove(const T& value){
+bool DoubleLinkedList<T>::remove(const T &value)
+{
     DoubleLinkedList<T>::DoubleNode *current = head;
 
-    while(current != nullptr){
-        if(current->value == value){
-            if(current == head){
+    while (current != nullptr)
+    {
+        if (current->value == value)
+        {
+            if (current == head)
+            {
                 pop_front();
-            } else if(current == tail) {
+            }
+            else if (current == tail)
+            {
                 pop_back();
-            } else {
+            }
+            else
+            {
                 DoubleLinkedList<T>::DoubleNode *preNode = current->previous;
                 DoubleLinkedList<T>::DoubleNode *nextNode = current->next;
                 preNode->next = nextNode;
@@ -85,4 +106,42 @@ bool DoubleLinkedList<T>::remove(const T& value){
     }
 
     return false;
+}
+
+template <typename T>
+bool DoubleLinkedList<T>::contains(const T &value) const
+{
+    DoubleLinkedList<T>::DoubleNode *current = head;
+    while (currebt != nullptr)
+    {
+        if (current->value == value)
+        {
+            return true;
+        }
+        current = current->next;
+    }
+    return false;
+}
+
+template <typename T>
+DoubleLinkedList<T>::DoubleNode* DoubleLinkedList<T>::find(const T& value) const{
+    DoubleLinkedList<T>::DoubleNode *current = head;
+    while(current != nullptr){
+        if(current-> value == value){
+            break;
+        }
+        current = current->next;
+    }
+
+    return current != nullptr ? current : T();
+}
+
+template <typename T>
+T DoubleLinkedList<T>::front() const {
+    return head->value;
+}
+
+template <typename T>
+T DoubleLinkedList<T>::back() const {
+    return tail->value;
 }
