@@ -96,7 +96,6 @@ void SingleLinkedList<T>::pop_back()
         delete tail;
         tail = nullptr;
         head = nullptr;
-        size = 0;
     }
     else
     {
@@ -308,7 +307,7 @@ T SingleLinkedList<T>::at(int index) const
     if (index < 0 || index >= size)
         throw IndexOutOfRangeException("Index out of range");
 
-    SingleNode *current = head->next;
+    SingleNode *current = head;
     for (int i = 0; i != index; i++)
     {
         current = current->next;
@@ -364,9 +363,6 @@ void SingleLinkedList<T>::insert(int index, const T &value)
     if (index < 0 || index > size)
         throw IndexOutOfRangeException("Index out of range");
 
-    SingleNode *node = new SingleNode(value);
-    SingleNode *current = head;
-
     if (index == 0)
     {
         push_front(value);
@@ -377,6 +373,8 @@ void SingleLinkedList<T>::insert(int index, const T &value)
     }
     else
     {
+        SingleNode *node = new SingleNode(value);
+        SingleNode *current = head;
         while (index > 1)
         {
             current = current->next;
@@ -385,8 +383,8 @@ void SingleLinkedList<T>::insert(int index, const T &value)
 
         node->next = current->next;
         current->next = node;
+        ++size;
     }
-    ++size;
 }
 
 /**
@@ -403,14 +401,14 @@ void SingleLinkedList<T>::insert(int index, const T &value)
 template <typename T>
 void SingleLinkedList<T>::removeAt(int index)
 {
-    if (index < 0 || index > size)
+    if (index < 0 || index >= size)
         throw IndexOutOfRangeException("Index out of range");
 
     if (index == 0)
     {
         pop_front();
     }
-    else if (index == size)
+    else if (index == size - 1)
     {
         pop_back();
     }
@@ -447,9 +445,9 @@ void SingleLinkedList<T>::reverse()
     if (head->next == nullptr)
         return;
 
-    SingleLinkedList<T>::SingleNode *prev = head;
+    SingleLinkedList<T>::SingleNode *prev = nullptr;
     SingleLinkedList<T>::SingleNode *current = head;
-    SingleLinkedList<T>::SingleNode *next = head;
+    SingleLinkedList<T>::SingleNode *next = nullptr;
     tail = head;
 
     while (current != nullptr)
@@ -492,12 +490,12 @@ void SingleLinkedList<T>::sort(bool isDesc)
     if (isDesc)
     {
         std::sort(listNode.begin(), listNode.end(), [](SingleLinkedList<T>::SingleNode *a, SingleLinkedList<T>::SingleNode *b)
-                  { return a->value > b->value; })
+                  { return a->value >= b->value; });
     }
     else
     {
         std::sort(listNode.begin(), listNode.end(), [](SingleLinkedList<T>::SingleNode *a, SingleLinkedList<T>::SingleNode *b)
-                  { return a->value < b->value; })
+                  { return a->value <= b->value; });
     }
 
     for (int i = 0; i < listNode.size(); i++)

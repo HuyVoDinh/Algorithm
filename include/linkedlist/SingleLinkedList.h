@@ -15,8 +15,8 @@ class SingleLinkedList : public LinkedList<T> {
         int size;
    public:
         //Constructor/Destructor
-        SingleLinkedList() : head(nullptr), size(0) {}
-        SingleLinkedList(SingleNode *head, int size) : head(head), size(size) {}
+        SingleLinkedList() : head(nullptr), tail(nullptr), size(0) {}
+        SingleLinkedList(SingleNode *head, int size) : head(head), tail(head), size(size) {}
         SingleLinkedList(const SingleLinkedList<T>& other)
             : head(nullptr), tail(nullptr), size(0)
         {
