@@ -42,7 +42,8 @@ void DoubleLinkedList<T>::pop_front()
     {
         throw EmptyListException("List is empty");
     }
-    else if (head == tail)
+    
+    if (head == tail)
     {
         delete head;
         head = nullptr;
@@ -61,6 +62,11 @@ void DoubleLinkedList<T>::pop_front()
 template <typename T>
 void DoubleLinkedList<T>::pop_back()
 {
+    if (head == nullptr)
+    {
+        throw EmptyListException("List is empty");
+    }
+    
     if (head == tail)
     {
         pop_front();
@@ -78,6 +84,11 @@ void DoubleLinkedList<T>::pop_back()
 template <typename T>
 bool DoubleLinkedList<T>::remove(const T &value)
 {
+    if (head == nullptr)
+    {
+        throw EmptyListException("List is empty");
+    }
+
     DoubleLinkedList<T>::DoubleNode *current = head;
 
     while (current != nullptr)
@@ -111,8 +122,13 @@ bool DoubleLinkedList<T>::remove(const T &value)
 template <typename T>
 bool DoubleLinkedList<T>::contains(const T &value) const
 {
+    if (head == nullptr)
+    {
+        throw EmptyListException("List is empty");
+    }
+
     DoubleLinkedList<T>::DoubleNode *current = head;
-    while (currebt != nullptr)
+    while (current != nullptr)
     {
         if (current->value == value)
         {
@@ -144,4 +160,70 @@ T DoubleLinkedList<T>::front() const {
 template <typename T>
 T DoubleLinkedList<T>::back() const {
     return tail->value;
+}
+
+template <typename T>
+void DoubleLinkedList<T>::clear() {
+    DoubleLinkedList<T>::DoubleNode *current = head;
+
+    while(head != nullptr){
+        head = head->next;
+        delete current;
+        current = nullptr;
+        current = head;
+    }
+
+    size = 0;
+    tail = nullptr;
+    head = nullptr;
+}
+
+
+template<typename T>
+int DoubleLinkedList<T>::getSize() const{
+    return size;
+}
+
+template<typename T>
+bool DoubleLinkedList<T>::isEmpty() const {
+    if(head == nullptr && tail == nullptr)
+        return true;
+    return false;
+}
+
+template<typename T>
+T DoubleLinkedList<T>::at(int index) const {
+    if (head == nullptr)
+    {
+        throw EmptyListException("List is empty");
+    }
+    if(index < 0 || index >= size){
+        throw IndexOutOfRangeException("Index out of range");
+    }
+
+    DoubleLinkedList<T>::DoubleNode *current = head;
+    for(int i = 1; i < index; i++)
+    {
+        current = current->next;
+    }
+    return current->value;
+}
+
+template<typename T>
+int DoubleLinkedList<T>::indexOf(const T& value) {
+    if (head == nullptr)
+    {
+        throw EmptyListException("List is empty");
+    }
+    
+    DoubleLinkedList<T>::DoubleNode *current = head;
+    uint index = 0;
+
+    while(current != nullptr){
+        if(current->value == value)
+            return index;
+    }
+    index++;
+    current = current->next;
+    return -1;
 }
