@@ -468,7 +468,7 @@ void SingleLinkedList<T>::reverse()
  * This function sorts the elements in the list in either ascending or descending order based on the isDesc parameter.
  * It uses std::sort to sort the nodes by their values and then reconnects them in the sorted order.
  *
- * @todo Apply merge sort to redfuce space complexity
+ * @todo Apply merge sort to reduce space complexity
  */
 template <typename T>
 void SingleLinkedList<T>::sort(bool isDesc)
