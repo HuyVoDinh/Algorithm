@@ -29,7 +29,7 @@ void SingleLinkedList<T>::push_front(const T &value)
 /**
  * @brief Add an element to the end of the list
  * @param value The value to be added to the end of the list
- * @throws bac_alloc if memory allocation fails
+ * @throws bad_alloc if memory allocation fails
  *
  * This function creates a new node with the given value and places it at the end of the list.
  * It updates the tail pointer and increments the size of the list.

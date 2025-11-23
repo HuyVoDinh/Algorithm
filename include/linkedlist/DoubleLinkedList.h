@@ -53,6 +53,7 @@ class DoubleLinkedList : public LinkedList<T> {
         void swap(LinkedList<T>& other) override;
         T mid() const override;
         DoubleNode* getHead() const override;
+        DoubleNode* getTail() const override;
 };
 
 #include "detail/DoubleLinkedList.tpp"
