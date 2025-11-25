@@ -41,7 +41,6 @@ protected:
 
     void SetUp() override
     {
-        std::cout << "Debug\n";
         list.push_back(10);
         list.push_back(20);
         list.push_back(60);

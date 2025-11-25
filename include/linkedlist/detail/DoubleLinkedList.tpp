@@ -551,28 +551,32 @@ void DoubleLinkedList<T>::sort(bool isDesc)
 template <typename T>
 void DoubleLinkedList<T>::unique()
 {
-    if (head == nullptr){
+    if (head == nullptr)
+    {
         throw EmptyListException("List is empty");
     }
 
-    std::map<T,bool> map;
+    std::map<T, bool> map;
 
     DoubleLinkedList<T>::DoubleNode *current = head;
     DoubleLinkedList<T>::DoubleNode *previous = head;
-    while(current != nullptr){
-        if(map.find(current->value) != map.end()){
+    while (current != nullptr)
+    {
+        if (map.find(current->value) != map.end())
+        {
             DoubleLinkedList<T>::DoubleNode *next = current->next;
             previous->next == next;
             next->previous = previous;
             --size;
-            if(current == tail)
+            if (current == tail)
             {
                 tail = previous;
             }
             delete current;
             current = nullptr;
         }
-        else {
+        else
+        {
             map[current->value] = true;
         }
         previous = current;
@@ -666,22 +670,26 @@ void DoubleLinkedList<T>::print() const
 template <typename T>
 void DoubleLinkedList<T>::copyFrom(const LinkedList<T> &other)
 {
-    if(other.getHead() == nullptr){
+    if (other.getHead() == nullptr)
+    {
         throw EmptyListException("List is empty");
     }
     DoubleLinkedList<T>::DoubleNode *current = head;
-    try{
-        const DoubleLinkedList<T> *otherDLL = dynamic_cast<const DoubleLinkedList<T>*> (&other);
+    try
+    {
+        const DoubleLinkedList<T> *otherDLL = dynamic_cast<const DoubleLinkedList<T> *>(&other);
         DoubleLinkedList<T>::DoubleNode *copiedPtr = otherDLL->getHead();
 
         clear();
 
-        while(copiedPtr != nullptr){
+        while (copiedPtr != nullptr)
+        {
             push_back(copiedPtr->value);
             copiedPtr = copiedPtr->next;
         }
     }
-    catch(const std::bad_cast &e){
+    catch (const std::bad_cast &e)
+    {
         throw LinkedListException("Can't cast to Double Linked List");
     }
 }
