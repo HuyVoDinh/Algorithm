@@ -12,7 +12,7 @@
  * @throws bad_alloc if memory allocations fails
  *
  * This functions creates a new node with the given value and pplaces it at the beginning of the list.
- * It updates the head pointer and increaments the size of the list. If the list was empty, it also updates the tail pointer.
+ * It updates the head pointer and increments the size of the list. If the list was empty, it also updates the tail pointer.
  */
 template <typename T>
 void SingleLinkedList<T>::push_front(const T &value)
@@ -59,7 +59,7 @@ void SingleLinkedList<T>::push_back(const T &value)
  *
  * This function removes the first element from the list and updates the head pointer.
  * If the list becomes empty after removal, it also updates the tail pointer to nullptr.
- * The size of the list is decreamented by one.
+ * The size of the list is decremented by one.
  */
 template <typename T>
 void SingleLinkedList<T>::pop_front()
@@ -513,7 +513,7 @@ void SingleLinkedList<T>::sort(bool isDesc)
  * @throws EmptyListException if the list is empty
  *
  * This function removes duplicate elements from the list, keeping only the first occurrence of each value.
- * It uses a map to track which values have already been seen and removes sub occurrence
+ * It uses a map to track which values have already been seen and removes subsequence occurrence
  */
 template <typename T>
 void SingleLinkedList<T>::unique()

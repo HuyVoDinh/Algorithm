@@ -12,7 +12,7 @@
  * @throws bad_alloc if memory allocations fails
  *
  * This functions creates a new node with the given value and pplaces it at the beginning of the list.
- * It updates the head pointer and increaments the size of the list. If the list was empty, it also updates the tail pointer.
+ * It updates the head pointer and increments the size of the list. If the list was empty, it also updates the tail pointer.
  */
 template <typename T>
 void DoubleLinkedList<T>::push_front(const T &value)
@@ -62,7 +62,7 @@ void DoubleLinkedList<T>::push_back(const T &value)
  *
  * This function removes the first element from the list and updates the head pointer.
  * If the list becomes empty after removal, it also updates the tail pointer to nullptr.
- * The size of the list is decreamented by one.
+ * The size of the list is decremented by one.
  */
 template <typename T>
 void DoubleLinkedList<T>::pop_front()
@@ -232,6 +232,10 @@ typename DoubleLinkedList<T>::DoubleNode *DoubleLinkedList<T>::find(const T &val
 template <typename T>
 T DoubleLinkedList<T>::front() const
 {
+    if (head == nullptr)
+    {
+        throw EmptyListException("List is empty");
+    }
     return head->value;
 }
 
@@ -246,6 +250,10 @@ T DoubleLinkedList<T>::front() const
 template <typename T>
 T DoubleLinkedList<T>::back() const
 {
+    if (head == nullptr)
+    {
+        throw EmptyListException("List is empty");
+    }
     return tail->value;
 }
 
@@ -323,7 +331,7 @@ T DoubleLinkedList<T>::at(int index) const
     }
 
     DoubleLinkedList<T>::DoubleNode *current = head;
-    for (int i = 1; i < index; i++)
+    for (int i = 0; i < index; i++)
     {
         current = current->next;
     }
@@ -398,7 +406,7 @@ void DoubleLinkedList<T>::insert(int index, const T &value)
         }
         DoubleLinkedList<T>::DoubleNode *nextNode = current->next;
 
-        newNode->next = newNode;
+        newNode->next = nextNode;
         nextNode->previous = newNode;
         current->next = newNode;
         newNode->previous = current;
@@ -538,11 +546,38 @@ void DoubleLinkedList<T>::sort(bool isDesc)
  * @throws EmptyListException if the list is empty
  *
  * This function removes duplicate elements from the list, keeping only the first occurrence of each value.
- * It uses a map to track which values have already been seen and removes sub occurrence
+ * It uses a map to track which values have already been seen and removes subsequence occurrence
  */
 template <typename T>
 void DoubleLinkedList<T>::unique()
 {
+    if (head == nullptr){
+        throw EmptyListException("List is empty");
+    }
+
+    std::map<T,bool> map;
+
+    DoubleLinkedList<T>::DoubleNode *current = head;
+    DoubleLinkedList<T>::DoubleNode *previous = head;
+    while(current != nullptr){
+        if(map.find(current->value) != map.end()){
+            DoubleLinkedList<T>::DoubleNode *next = current->next;
+            previous->next == next;
+            next->previous = previous;
+            --size;
+            if(current == tail)
+            {
+                tail = previous;
+            }
+            delete current;
+            current = nullptr;
+        }
+        else {
+            map[current->value] = true;
+        }
+        previous = current;
+        current = current->next;
+    }
 }
 
 /**
@@ -631,6 +666,24 @@ void DoubleLinkedList<T>::print() const
 template <typename T>
 void DoubleLinkedList<T>::copyFrom(const LinkedList<T> &other)
 {
+    if(other.getHead() == nullptr){
+        throw EmptyListException("List is empty");
+    }
+    DoubleLinkedList<T>::DoubleNode *current = head;
+    try{
+        const DoubleLinkedList<T> *otherDLL = dynamic_cast<const DoubleLinkedList<T>*> (&other);
+        DoubleLinkedList<T>::DoubleNode *copiedPtr = otherDLL->getHead();
+
+        clear();
+
+        while(copiedPtr != nullptr){
+            push_back(copiedPtr->value);
+            copiedPtr = copiedPtr->next;
+        }
+    }
+    catch(const std::bad_cast &e){
+        throw LinkedListException("Can't cast to Double Linked List");
+    }
 }
 
 /**
@@ -656,17 +709,21 @@ DoubleLinkedList<T> *DoubleLinkedList<T>::clone() const
  * Two list considered equal if they have the same size and all corresponding elements are equal.
  */
 template <typename T>
-bool DoubleLinkedList<T>::equals(const LinkedList<T> &other) const{
+bool DoubleLinkedList<T>::equals(const LinkedList<T> &other) const
+{
     DoubleLinkedList<T>::DoubleNode *current = head;
-    const DoubleLinkedList<T> *otherDLL = dynamic_cast<const DoubleLinkedList<T>* >( &other);
+    const DoubleLinkedList<T> *otherDLL = dynamic_cast<const DoubleLinkedList<T> *>(&other);
     DoubleLinkedList<T>::DoubleNode *currentOther = otherDLL->getHead();
 
-    if(size != otherDLL->getSize()){
+    if (size != otherDLL->getSize())
+    {
         return false;
     }
 
-    while(current != nullptr){
-        if(current->value != currentOther->value){
+    while (current != nullptr)
+    {
+        if (current->value != currentOther->value)
+        {
             return false;
         }
         current = current->next;
@@ -683,13 +740,17 @@ bool DoubleLinkedList<T>::equals(const LinkedList<T> &other) const{
  * This function swaps the contents of this list with another list by exchanging their head pointers, tali pointers, and sizes.
  */
 template <typename T>
-void DoubleLinkedList<T>::swap(LinkedList<T> &other){
-    try{
-        DoubleLinkedList<T> *otherDLL = dynamic_cast<DoubleLinkedList<T>*>(&other);
+void DoubleLinkedList<T>::swap(LinkedList<T> &other)
+{
+    try
+    {
+        DoubleLinkedList<T> *otherDLL = dynamic_cast<DoubleLinkedList<T> *>(&other);
         std::swap(head, otherDLL->head);
         std::swap(tail, otherDLL->tail);
         std::swap(size, otherDLL->size);
-    } catch (std::bad_cast &e){
+    }
+    catch (std::bad_cast &e)
+    {
         throw LinkedListException("Can't cast to Double Linked List");
     }
 }
@@ -705,8 +766,9 @@ void DoubleLinkedList<T>::swap(LinkedList<T> &other){
  * (using integer division)
  */
 template <typename T>
-T DoubleLinkedList<T>::mid() const{
-    return at(size/2);
+T DoubleLinkedList<T>::mid() const
+{
+    return at(size / 2);
 }
 
 /**
@@ -717,7 +779,8 @@ T DoubleLinkedList<T>::mid() const{
  * If the list is empty, it returns nullptr.
  */
 template <typename T>
-typename DoubleLinkedList<T>::DoubleNode *DoubleLinkedList<T>::getHead() const{
+typename DoubleLinkedList<T>::DoubleNode *DoubleLinkedList<T>::getHead() const
+{
     return head;
 }
 
@@ -729,6 +792,7 @@ typename DoubleLinkedList<T>::DoubleNode *DoubleLinkedList<T>::getHead() const{
  * If the list is empty, it returns nullptr.
  */
 template <typename T>
-typename DoubleLinkedList<T>::DoubleNode *DoubleLinkedList<T>::getTail() const{
+typename DoubleLinkedList<T>::DoubleNode *DoubleLinkedList<T>::getTail() const
+{
     return tail;
 }
