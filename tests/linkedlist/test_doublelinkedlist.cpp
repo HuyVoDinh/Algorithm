@@ -63,9 +63,8 @@ TEST_F(DoubleLinkedListTextFixture, CopyConstructor_NonEmptyList)
 {
     DoubleLinkedList<int> list2(list);
     EXPECT_EQ(list2.getSize(), 7);
-    EXPECT_EQ(list2.getHead()->value, 10);
-    EXPECT_EQ(list2.getTail()->value, 30);
-    EXPECT_EQ(list2.getHead(), list.getHead());
+    EXPECT_EQ(list2.getHead()->value, list.getHead()->value);
+    EXPECT_EQ(list2.getTail()->value, list.getTail()->value);
 }
 
 TEST(DoubleLinkedListTest, PushFront_EmptyList)
@@ -438,7 +437,7 @@ TEST_F(DoubleLinkedListTextFixture, RemoveAt_NonEmpty_RemoveFirstIndex)
     DoubleLinkedList<int>::DoubleNode *secondNode = list.getHead()->next;
 
     EXPECT_NO_THROW(list.removeAt(0));
-    EXPECT_EQ(list.getSize(), 0);
+    EXPECT_EQ(list.getSize(), 6);
     EXPECT_EQ(list.getHead(), secondNode);
 }
 
@@ -513,7 +512,7 @@ TEST_F(DoubleLinkedListTextFixture, Sort_NonEmptyList_Desc){
 }
 
 TEST_F(DoubleLinkedListTextFixture, Sort_NonEmptyList_Incr){
-    EXPECT_NO_THROW(list.sort(true));
+    EXPECT_NO_THROW(list.sort());
 
     EXPECT_EQ(list.getHead()->value, 10);
     EXPECT_EQ(list.getTail()->value, 60);

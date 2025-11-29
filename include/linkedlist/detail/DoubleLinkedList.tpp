@@ -112,6 +112,7 @@ void DoubleLinkedList<T>::pop_back()
     {
         DoubleLinkedList<T>::DoubleNode *current = tail;
         tail = tail->previous;
+        tail->next = nullptr;
         delete current;
         current = nullptr;
         --size;
@@ -162,6 +163,7 @@ bool DoubleLinkedList<T>::remove(const T &value)
             }
             return true;
         }
+        current = current->next;
     }
 
     return false;
@@ -208,6 +210,9 @@ bool DoubleLinkedList<T>::contains(const T &value) const
 template <typename T>
 typename DoubleLinkedList<T>::DoubleNode *DoubleLinkedList<T>::find(const T &value) const
 {
+    if (head == nullptr)
+        throw EmptyListException("List is empty");
+
     DoubleLinkedList<T>::DoubleNode *current = head;
     while (current != nullptr)
     {
@@ -363,8 +368,9 @@ int DoubleLinkedList<T>::indexOf(const T &value)
         if (current->value == value)
             return index;
         index++;
+        current = current->next;
     }
-    current = current->next;
+
     return -1;
 }
 
@@ -400,7 +406,7 @@ void DoubleLinkedList<T>::insert(int index, const T &value)
     {
         DoubleLinkedList<T>::DoubleNode *newNode = new DoubleLinkedList<T>::DoubleNode(value);
         DoubleLinkedList<T>::DoubleNode *current = head;
-        for (int i = 0; i < index; i++)
+        for (int i = 0; i < index - 1; i++)
         {
             current = current->next;
         }
@@ -476,15 +482,25 @@ template <typename T>
 void DoubleLinkedList<T>::reverse()
 {
     if (head == nullptr)
-    {
-        throw EmptyListException("List is empty");
-    }
+        throw EmptyListException("Empty list exception");
 
+    if (head->next == nullptr)
+        return;
+
+    DoubleLinkedList<T>::DoubleNode *prev = nullptr;
     DoubleLinkedList<T>::DoubleNode *current = head;
-    head = tail;
-    tail = current;
-    head->previous = nullptr;
-    tail->next = nullptr;
+    DoubleLinkedList<T>::DoubleNode *next = nullptr;
+    tail = head;
+
+    while (current != nullptr)
+    {
+        next = current->next;
+        current->next = prev;
+        current->previous = prev;
+        prev = current;
+        current = next;
+    }
+    head = prev;
 }
 
 /**
@@ -529,14 +545,13 @@ void DoubleLinkedList<T>::sort(bool isDesc)
                   { return a->value <= b->value; });
     }
 
-    for (int i = 0; i < listNode.size(); i++)
+    for (int i = 1; i < listNode.size(); i++)
     {
         listNode[i]->previous = listNode[i - 1];
         listNode[i - 1]->next = listNode[i];
     }
     listNode.front()->previous = nullptr;
     listNode.back()->next = nullptr;
-
     head = listNode.front();
     tail = listNode.back();
 }
@@ -560,27 +575,28 @@ void DoubleLinkedList<T>::unique()
 
     DoubleLinkedList<T>::DoubleNode *current = head;
     DoubleLinkedList<T>::DoubleNode *previous = head;
+    DoubleLinkedList<T>::DoubleNode *next = current->next;
     while (current != nullptr)
     {
+        next = current->next;
         if (map.find(current->value) != map.end())
         {
-            DoubleLinkedList<T>::DoubleNode *next = current->next;
-            previous->next == next;
             next->previous = previous;
+            previous->next = next;
             --size;
             if (current == tail)
             {
                 tail = previous;
             }
             delete current;
-            current = nullptr;
+            current = previous;
         }
         else
         {
             map[current->value] = true;
         }
         previous = current;
-        current = current->next;
+        current = next;
     }
 }
 
@@ -595,6 +611,10 @@ void DoubleLinkedList<T>::unique()
 template <typename T>
 std::vector<T> DoubleLinkedList<T>::toVector() const
 {
+    if (head == nullptr)
+    {
+        throw EmptyListException("List is empty");
+    }
     DoubleLinkedList<T>::DoubleNode *current = head;
 
     std::vector<T> list;
@@ -704,6 +724,10 @@ void DoubleLinkedList<T>::copyFrom(const LinkedList<T> &other)
 template <typename T>
 DoubleLinkedList<T> *DoubleLinkedList<T>::clone() const
 {
+    if (head == nullptr)
+    {
+        throw EmptyListException("List is empty");
+    }
     return new DoubleLinkedList<T>(*this);
 }
 

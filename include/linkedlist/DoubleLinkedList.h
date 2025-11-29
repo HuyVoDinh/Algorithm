@@ -15,11 +15,20 @@ class DoubleLinkedList : public LinkedList<T> {
         int size;
    public:
         //Contructor/Destructor
-        DoubleLinkedList() : head(nullptr), size(0) {}
-        DoubleLinkedList(DoubleNode *head, int size) : head(head), size(size) {}
+        DoubleLinkedList() : head(nullptr), tail(nullptr), size(0) {}
+        DoubleLinkedList(DoubleNode *head, int size) : head(head), tail(head), size(size) {}
         DoubleLinkedList(const DoubleLinkedList<T>& other)
             : head(nullptr), tail(nullptr), size(0)
         {
+            if (other.head == nullptr)
+                return;
+
+            DoubleNode* current = other.getHead();
+            while (current != nullptr)
+            {
+                this->push_back(current->value);
+                current = current->next;
+            }
         }
         ~DoubleLinkedList() override {
             clear();
