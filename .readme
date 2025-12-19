@@ -1,0 +1,189 @@
+# Algorithm Library
+
+A comprehensive C+ template library implementing various algorithms and data structures.
+
+# Table of Contents
+- [Single Linked List](#single-linked-list)
+- [Double Linked List](#double-linked-list)
+- [Getting started](#getting-started)
+- [Testing](#testing)
+- [Contributing](#contributing)
+
+## Singled Linked List
+
+<details>
+<summary>Click to expand/collapse</summary>
+
+### Overview
+A complete implementation of a singly linked list with efficient operations and comprehensive functionality
+
+### Features
+- **Basic Operations**: push_front, push_back, pop_front, pop_back
+- **Search Operations**: find, contains, indexOf, at
+- **Modification Operations**: insert, remove, removeAt
+- **Utility Operations**: sort, reverse, unique, merge
+- **Memory Management**: clear, copyFrom, clone
+- **Comparison Operations**: equals, swap
+- **Conversion**: toVector
+- **Accessors**: front, back, getHead, getTail, getSize, isEmpty, mid
+
+### Usage Example
+```cpp
+#include "linkedlist/SingleLinkedList.h"
+#include <iostream>
+
+int main()
+{
+    SingleLinkedList<int> list;
+    list.push_back(10);
+    list.push_back(20);
+    list.push_front(5);
+    list.print(); // Expected output: 5 10 20
+
+    list.pop_front();
+    list.print(); // Expected output: 10 20
+
+    list.pop_back();
+    list.print(); // Expected output: 10
+
+    std::cout << "Front: " << list.front() << std::endl; // Expected output: Front: 10
+    std::cout << "Back: " << list.back() << std::endl;   // Expected output: Back: 10
+
+    list.clear();
+    std::cout << "Is Empty: " << (list.isEmpty() ? "Yes" : "No") << std::endl; // Expected output: Is Empty: Yes
+
+    return 0;
+}
+```
+### Exception Handling
+- `EmptyListException`: Thrown when performing operations on an empty list
+- `IndexOutOfRangeException`: Thrown when accessing invalid indices
+- `LinkedListException`: Thrown for type casting errors
+
+### API Reference
+
+#### Constructors
+- `SingleLinkedList()`: Creates an empty list
+- `SingleLinkedList(SingleNode *head, int size)`: Creates a list with given head and size
+- `SingleLinkedList(const SingleLinkedList<T>& other)`: Copy Constructor
+
+#### Basic Operations
+- `void push_front(const T& value)`: Adds element to the front
+- `void push_back(const T& value)`: Adds element to the back
+- `void pop_front()`: Removes element from the front
+- `void pop_back()`: Removes element from the back
+
+#### Search Operations
+- `bool contains(const T& value) const`: Checks if value exists in list 
+- `SingleNode* find(const T& value) const`: Finds node with given value
+- `T front() const`: Returns first element
+- `T back() const`: Returns last element
+- `T at(int index) const`: Returns element at index 
+- `int indexOf(const T& value) const`: Returns index of first occurrence
+
+#### Modification Operations
+- `void insert(int index, const T& value)`: Inserts element at index
+- `bool remove(const T& value)`: Removes first occurrence of value 
+- `void removeAt(int index)`: Removes element at index
+
+#### Utility Operations
+- `void reverse()`: Reverses the list
+- `void sort(bool isDesc = false)`: Sorts the list
+- `void unique()`: Removes duplicate elements
+- `void merge(LinkedList<T>& other)`: Merges with another list
+- `std::vector<T> toVector() const`: Converts to std::vector
+
+#### Memory Management
+- `void clear()`: Removes all elements
+- `void copyFrom(const LinkedList<T>& other)`: Copies from another list
+- `SingleLinkedList<T>* clone()`: Creates a deep copy
+
+#### Comparison Operations
+- `bool equals(const LinkedList<T>& other) const`: Compares with anotherlist
+- `void swap(LinkedList<T>& other)`: Swaps contents with another list
+
+#### Accessors
+- `int getSize() const`: Returns number of elements
+- `bool isEmpty() const`: Checks if list is empty 
+- `T mid() const`: Returns middle element 
+- `SingleNode* getHead() const`: Returns head node 
+- `SingleNode* getTail() const`: Returns tail node
+
+</details>
+
+## Double Linked List
+
+<details>
+<summary>Click to expand/collapse</summary>
+
+### Overview
+A doubly linked list implementation with bidirectional traversal capabilities.
+
+### Features
+- Bidirectional traversal (Forward and backward)
+- Efficient insertion and deletion at both ends
+- More complex node structure with previous and next pointers
+
+### Usage Example
+```
+
+```
+
+### API Reference
+*(Implementation is currently incomplete - see source code for available modethods)*
+
+</details>
+
+### Prerequisites
+- C++11 or later compiler
+- Google Test framewrok (for running test)
+
+### Building
+```bash
+# Clone the repository
+git clone <https://github.com/HuyVoDinh/Algorithm.git>
+
+# Compile the example
+g++ -std=c++11 example/linkedlist/single-linked-list-sample.cpp -o single-linkedd-list-sample
+
+# Run the example
+./single-linked-list-sample
+```
+## Getting Started
+
+### Including in Your Project
+```cpp
+#include "linkedlist/SingleLinkedList.cpp"
+
+// For double linkedlist
+#include "linkedlist/DoubleLinkedList.cpp"
+```
+
+### Testing
+
+This library includes comprehensive tests using Google Test framework
+
+### Running Tests
+```bash
+#Compile tests
+g++ -std=c++17 tests/linkedlist/test_singlelinkedlist.cpp -Iinclude -Igoogletest/googletest/include -Lgoogletest/build/lib -lgtest -lgtest_main -pthread -o build/test_singlelinkedlist.exe
+
+# Run test
+.\build\test_singlelinkedlist.exe
+```
+
+### Test Coverage
+- Basic functionality test
+- Edge case tests (empty lists, single elements)
+- Exception management test
+- Copy semantics tests
+
+### Development Guidelines
+- Follow C++11 standards
+- Write comprehensive tests for new features
+- Maintain existing code style
+- Document all public APIs
+- Ensure memory safety
+
+---
+**Note**: This library is designed for educational purposes and algorithmic practice. For production use, consider using standard library containers like `std::vector`, `std::list`, `std::forward_list`
